@@ -10,7 +10,7 @@ interface FeaturesGridBlockProps {
 
 // Safe icon lookup
 function getIcon(name: string) {
-  const icons = LucideIcons as Record<string, React.ComponentType<{ className?: string }>>;
+  const icons = LucideIcons as unknown as Record<string, React.ComponentType<{ className?: string }>>;
   return icons[name] || LucideIcons.Star;
 }
 
