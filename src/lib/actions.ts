@@ -33,7 +33,7 @@ async function getUserRole(userId: string): Promise<string | null> {
     .select('roles(name)')
     .eq('id', userId)
     .single();
-  return (data?.roles as { name: string } | null)?.name ?? null;
+  return (data?.roles as unknown as { name: string } | null)?.name ?? null;
 }
 
 // ============================================================
