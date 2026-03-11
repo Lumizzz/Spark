@@ -289,7 +289,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
 
       {/* Permission Matrix toggle */}
       <div className="gradient-border-card">
-        <button type="button" onClick={() => setShowMatrix(prev => !prev)}
+        <button type="button" onClick={() => setShowMatrix((prev: boolean) => !prev)}
           className="w-full flex items-center justify-between px-5 py-4 text-sm font-semibold text-white hover:bg-white/5 transition-colors">
           <span className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-violet-400" /> Permission Matrix

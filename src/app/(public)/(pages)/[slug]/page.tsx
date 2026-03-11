@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/server';
 import { getPricingPlans, getBlogPosts } from '@/lib/actions';
 import BlockRenderer from '@/components/blocks/BlockRenderer';
-import type { PageSection, Page } from '@/types';
+import type { PageSection, Page, PricingPlan, BlogPost } from '@/types';
 
 type Props = {
   params: { slug: string };
