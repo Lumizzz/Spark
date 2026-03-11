@@ -1,0 +1,70 @@
+import type { PageSection, PricingPlan, BlogPost } from '@/types';
+import HeroBlock from './HeroBlock';
+import FeaturesGridBlock from './FeaturesGridBlock';
+import PricingTableBlock from './PricingTableBlock';
+import CTASectionBlock from './CTASectionBlock';
+import {
+  TestimonialsBlock,
+  FAQSectionBlock,
+  ImageTextBlock,
+  RichTextBlock,
+  GalleryBlock,
+  LogoStripBlock,
+  BlogListBlock,
+} from './OtherBlocks';
+
+interface BlockRendererProps {
+  section: PageSection;
+  pricingPlans?: PricingPlan[];
+  blogPosts?: BlogPost[];
+}
+
+export default function BlockRenderer({ section, pricingPlans = [], blogPosts = [] }: BlockRendererProps) {
+  switch (section.type) {
+    case 'hero':
+      return <HeroBlock props={section.props as Parameters<typeof HeroBlock>[0]['props']} />;
+
+    case 'features_grid':
+      return <FeaturesGridBlock props={section.props as Parameters<typeof FeaturesGridBlock>[0]['props']} />;
+
+    case 'pricing_table':
+      return (
+        <PricingTableBlock
+          props={section.props as Parameters<typeof PricingTableBlock>[0]['props']}
+          plans={pricingPlans}
+        />
+      );
+
+    case 'cta_section':
+      return <CTASectionBlock props={section.props as Parameters<typeof CTASectionBlock>[0]['props']} />;
+
+    case 'testimonials':
+      return <TestimonialsBlock props={section.props as Parameters<typeof TestimonialsBlock>[0]['props']} />;
+
+    case 'faq_section':
+      return <FAQSectionBlock props={section.props as Parameters<typeof FAQSectionBlock>[0]['props']} />;
+
+    case 'image_text':
+      return <ImageTextBlock props={section.props as Parameters<typeof ImageTextBlock>[0]['props']} />;
+
+    case 'rich_text':
+      return <RichTextBlock props={section.props as Parameters<typeof RichTextBlock>[0]['props']} />;
+
+    case 'gallery':
+      return <GalleryBlock props={section.props as Parameters<typeof GalleryBlock>[0]['props']} />;
+
+    case 'logo_strip':
+      return <LogoStripBlock props={section.props as Parameters<typeof LogoStripBlock>[0]['props']} />;
+
+    case 'blog_list':
+      return (
+        <BlogListBlock
+          props={section.props as Parameters<typeof BlogListBlock>[0]['props']}
+          posts={blogPosts}
+        />
+      );
+
+    default:
+      return null;
+  }
+}

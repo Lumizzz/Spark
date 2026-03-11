@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --color-bg: #06060f;
+  --color-card: rgba(255, 255, 255, 0.04);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-purple: #7C3AED;
+  --color-purple-light: #A855F7;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: #f1f5f9;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-card-hover {
+  transition: all 0.3s ease;
+}
+
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(124, 58, 237, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #fff 0%, rgba(168, 85, 247, 0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-purple {
+  background: linear-gradient(135deg, #A855F7 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effects */
+.glow-purple {
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.4);
+}
+
+.glow-text {
+  text-shadow: 0 0 40px rgba(168, 85, 247, 0.5);
+}
+
+/* Background orbs */
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.5);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.8);
+}
+
+/* Rich text content styles */
+.prose-dark h1, .prose-dark h2, .prose-dark h3, .prose-dark h4 {
+  color: #f1f5f9;
+  font-family: var(--font-display);
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.prose-dark h1 { font-size: 2.5rem; }
+.prose-dark h2 { font-size: 1.875rem; }
+.prose-dark h3 { font-size: 1.5rem; }
+
+.prose-dark p {
+  color: #94a3b8;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.prose-dark a {
+  color: #A855F7;
+  text-decoration: underline;
+}
+
+.prose-dark ul, .prose-dark ol {
+  color: #94a3b8;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose-dark li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-dark blockquote {
+  border-left: 3px solid #7C3AED;
+  padding-left: 1rem;
+  color: #94a3b8;
+  font-style: italic;
+  margin: 1.5rem 0;
+}
+
+.prose-dark code {
+  background: rgba(124, 58, 237, 0.2);
+  color: #A855F7;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.875em;
+}
+
+.prose-dark pre {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+/* Dashboard styles */
+.dashboard-sidebar {
+  background: rgba(6, 6, 15, 0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.loading-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Page builder drag styles */
+.drag-handle {
+  cursor: grab;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-over {
+  border: 2px dashed rgba(124, 58, 237, 0.5) !important;
+  background: rgba(124, 58, 237, 0.05) !important;
+}
+
+/* Quill editor overrides */
+.ql-toolbar {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.ql-container {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: none !important;
+  border-radius: 0 0 8px 8px !important;
+  min-height: 200px;
+}
+
+.ql-editor {
+  color: #e2e8f0 !important;
+  min-height: 200px;
+}
+
+.ql-stroke {
+  stroke: #94a3b8 !important;
+}
+
+.ql-fill {
+  fill: #94a3b8 !important;
+}
+
+.ql-picker-label {
+  color: #94a3b8 !important;
+}
