@@ -1,15 +1,11 @@
-import { Toaster } from 'react-hot-toast';
+import React from 'react';
+import AnimatedBackground from '@/components/public/AnimatedBackground';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      {children}
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: { background: '#1a1a2e', color: '#f1f5f9', border: '1px solid rgba(255,255,255,0.1)' },
-        }}
-      />
-    </>
+    <div className="relative min-h-screen" style={{ background: 'var(--color-bg)' }}>
+      <AnimatedBackground />
+      <div className="relative z-10">{children}</div>
+    </div>
   );
 }

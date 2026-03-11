@@ -159,11 +159,7 @@ body {
   margin: 1.5rem 0;
 }
 
-/* Dashboard styles */
-.dashboard-sidebar {
-  background: rgba(6, 6, 15, 0.95);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-}
+/* Dashboard styles - upgraded below */
 
 /* Animations */
 @keyframes shimmer {
@@ -222,3 +218,332 @@ body {
 .ql-picker-label {
   color: #94a3b8 !important;
 }
+
+/* ============================================================ */
+/* UPGRADED DASHBOARD STYLES */
+/* ============================================================ */
+
+/* Modern sidebar with gradient accent */
+.dashboard-sidebar {
+  background: linear-gradient(180deg, rgba(8, 8, 20, 0.98) 0%, rgba(6, 6, 15, 0.98) 100%);
+  border-right: 1px solid rgba(124, 58, 237, 0.12);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Stat card gradients */
+.stat-card-purple { background: linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(124,58,237,0.05) 100%); border-color: rgba(124,58,237,0.2); }
+.stat-card-blue { background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%); border-color: rgba(59,130,246,0.2); }
+.stat-card-green { background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.05) 100%); border-color: rgba(16,185,129,0.2); }
+.stat-card-orange { background: linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(245,158,11,0.05) 100%); border-color: rgba(245,158,11,0.2); }
+
+/* Code block styles for code_showcase block */
+.code-block {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+.code-block-header {
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.code-dot { width: 10px; height: 10px; border-radius: 50%; }
+.code-dot-red { background: #FF5F57; }
+.code-dot-yellow { background: #FEBC2E; }
+.code-dot-green { background: #28C840; }
+
+.token-keyword { color: #C792EA; }
+.token-string { color: #C3E88D; }
+.token-comment { color: #546E7A; font-style: italic; }
+.token-number { color: #F78C6C; }
+.token-function { color: #82AAFF; }
+.token-variable { color: #EEFFFF; }
+.token-operator { color: #89DDFF; }
+.token-type { color: #FFCB6B; }
+
+/* Animate float */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float { animation: float 4s ease-in-out infinite; }
+
+/* Animate pulse-glow */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(124,58,237,0.3); }
+  50% { box-shadow: 0 0 40px rgba(124,58,237,0.6); }
+}
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+/* Feature showcase card */
+.feature-card-glow:hover {
+  box-shadow: 0 0 60px rgba(124, 58, 237, 0.15), 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* Stats bar shimmer effect */
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.stat-animate { animation: count-up 0.6s ease-out forwards; }
+
+/* ============================================================ */
+/* ADMIN PANEL 2.0 — Obsidian UI System */
+/* ============================================================ */
+
+/* Grid texture overlay */
+.admin-grid-bg {
+  background-image: 
+    linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Upgraded stat cards */
+.admin-stat-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.admin-stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(124,58,237,0.4), transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.admin-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,58,237,0.2);
+}
+
+/* Sidebar nav item active glow */
+.sidebar-active {
+  background: linear-gradient(90deg, rgba(124,58,237,0.2) 0%, rgba(124,58,237,0.05) 100%);
+  border-left: 2px solid #7C3AED;
+  color: #c4b5fd;
+}
+.sidebar-active svg {
+  color: #a78bfa;
+}
+
+/* Table row hover */
+.admin-row:hover {
+  background: rgba(124,58,237,0.04);
+}
+
+/* Gradient border card */
+.gradient-border-card {
+  position: relative;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+}
+.gradient-border-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(124,58,237,0.5) 0%, rgba(59,130,246,0.2) 50%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Sparkline bars */
+.sparkline-bar {
+  background: rgba(124,58,237,0.4);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+.sparkline-bar:hover { background: rgba(124,58,237,0.8); }
+
+/* Tag chip */
+.admin-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+}
+
+/* Status dot */
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-dot-green { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+.status-dot-amber { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+.status-dot-red { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+
+/* Animated gradient title */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animated-gradient-text {
+  background: linear-gradient(270deg, #fff, #c4b5fd, #60a5fa, #fff);
+  background-size: 400% 400%;
+  animation: gradient-shift 6s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Command bar style input */
+.admin-search-input {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: white;
+  transition: all 0.2s;
+}
+.admin-search-input:focus {
+  background: rgba(124,58,237,0.08);
+  border-color: rgba(124,58,237,0.4);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+  outline: none;
+}
+
+/* Notification badge */
+.notif-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 1.5px solid #06060f;
+}
+
+/* ── ANIMATED BACKGROUND ── */
+@keyframes aurora-shift {
+  0%   { background-position: 0% 50%, 100% 50%, 50% 0%; opacity: 1; }
+  33%  { background-position: 30% 60%, 70% 40%, 60% 30%; }
+  66%  { background-position: 60% 30%, 40% 70%, 30% 60%; }
+  100% { background-position: 100% 50%, 0% 50%, 50% 100%; }
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0.025; }
+  50%       { opacity: 0.05;  }
+}
+
+/* Aurora glow on hover elements */
+.aurora-card:hover::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(124,58,237,0.3) 0%, rgba(59,130,246,0.2) 50%, transparent 100%);
+  z-index: -1;
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.aurora-card:hover::after { opacity: 1; }
+
+/* ── COMMAND PALETTE ── */
+@keyframes command-in {
+  from { opacity: 0; transform: scale(0.96) translateY(-8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.command-overlay {
+  animation: overlay-in 0.1s ease forwards;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+}
+
+/* ── ONBOARDING ── */
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.onboarding-card { animation: slide-in-right 0.3s ease forwards; }
+
+/* ── AURORA ANIMATIONS ── */
+@keyframes aurora-band1 {
+  0%   { transform: skewY(-3deg) translateY(-8%); opacity: 0.6; }
+  50%  { transform: skewY(-1deg) translateY(4%);  opacity: 1; }
+  100% { transform: skewY(-5deg) translateY(-4%); opacity: 0.7; }
+}
+@keyframes aurora-band2 {
+  0%   { transform: skewY(2deg)  translateY(6%);  opacity: 0.5; }
+  50%  { transform: skewY(4deg)  translateY(-4%); opacity: 0.9; }
+  100% { transform: skewY(1deg)  translateY(2%);  opacity: 0.6; }
+}
+@keyframes aurora-shimmer {
+  from { background-position: 0 0; }
+  to   { background-position: 80px 0; }
+}
+
+/* ── ONBOARDING CHECKLIST ── */
+@keyframes check-pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.2); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.check-pop { animation: check-pop 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+/* ── NOTIFICATION BELL ── */
+@keyframes bell-ring {
+  0%, 100% { transform: rotate(0deg); }
+  20%       { transform: rotate(-8deg); }
+  40%       { transform: rotate(8deg); }
+  60%       { transform: rotate(-5deg); }
+  80%       { transform: rotate(5deg); }
+}
+.bell-ring { animation: bell-ring 0.5s ease; }
+
+/* Progress ring */
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+/* ── LIGHT MODE ── */
+:root.light-mode {
+  --color-bg: #f8f7ff;
+  --color-card: rgba(255,255,255,0.7);
+  --color-border: rgba(0,0,0,0.08);
+}
+
+:root.light-mode body {
+  color: #1a1a2e;
+}
+
+:root.light-mode .glass-card {
+  background: rgba(255,255,255,0.7) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+}
+
+:root.light-mode .text-white { color: #1a1a2e !important; }
+:root.light-mode .text-slate-400 { color: #4b5563 !important; }
+:root.light-mode .text-slate-500 { color: #6b7280 !important; }
+:root.light-mode .text-slate-600 { color: #9ca3af !important; }
+:root.light-mode header nav { background: rgba(255,255,255,0.85) !important; }

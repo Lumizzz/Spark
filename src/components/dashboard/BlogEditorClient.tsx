@@ -52,6 +52,15 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
   };
 
+  const handleContentChange = (val: string) => {
+    // Auto-calculate read time from word count
+    const text = val.replace(/<[^>]*>/g, ' ');
+    const words = text.trim().split(/\s+/).filter(Boolean).length;
+    const minutes = Math.max(1, Math.ceil(words / 200));
+    setForm((f) => ({ ...f, content: val, read_time: minutes }));
+    if (errors.content) setErrors((e) => ({ ...e, content: undefined }));
+  };
+
   const handleTitleChange = (val: string) => {
     setForm((f) => ({ ...f, title: val, slug: slugEdited ? f.slug : slugify(val) }));
     if (errors.title) setErrors((e) => ({ ...e, title: undefined }));
@@ -229,7 +238,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               </label>
               <textarea
                 value={form.content}
-                onChange={(e) => setField('content', e.target.value)}
+                onChange={(e) => handleContentChange(e.target.value)}
                 rows={18}
                 placeholder="<h2>Introduction</h2><p>Your content here...</p>"
                 className={`${inputClass('content')} resize-none font-mono text-xs`}

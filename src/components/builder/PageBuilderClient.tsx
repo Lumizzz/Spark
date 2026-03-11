@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import { generateId } from '@/lib/utils';
 import BlockPropsEditor from './BlockPropsEditor';
-import { DEFAULT_BLOCK_PROPS } from './blockDefaults';
+import { DEFAULT_BLOCK_PROPS, NEW_BLOCK_DEFAULTS } from './blockDefaults';
 
 interface PageBuilderClientProps {
   page: Page;

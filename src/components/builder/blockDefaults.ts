@@ -85,3 +85,97 @@ export const DEFAULT_BLOCK_PROPS: Record<BlockType, BlockProps> = {
     logos: ['Company A', 'Company B', 'Company C', 'Company D', 'Company E'],
   },
 };
+
+// New block defaults
+export const NEW_BLOCK_DEFAULTS = {
+  stats_bar: {
+    eyebrow: 'BY THE NUMBERS',
+    title: 'Trusted by teams worldwide',
+    stats: [
+      { value: '50000', label: 'Developers', suffix: '+', description: 'Using Spark daily' },
+      { value: '99.9', label: 'Uptime', suffix: '%', description: 'SLA guaranteed' },
+      { value: '200', label: 'Countries', suffix: '+', description: 'Global reach' },
+      { value: '4.9', label: 'Rating', prefix: '★', description: 'Average score' },
+    ],
+    background: 'dark',
+  },
+  code_showcase: {
+    eyebrow: 'DEVELOPER FIRST',
+    title: 'Clean code, powerful APIs',
+    subtitle: 'Write less boilerplate and ship faster. Our SDK handles the hard parts so you can focus on building.',
+    imagePosition: 'right',
+    tabs: [
+      {
+        label: 'index.js',
+        language: 'javascript',
+        code: `// Initialize Spark
+const spark = new Spark({
+  apiKey: process.env.SPARK_KEY,
+  region: 'us-east-1',
+});
+
+// Deploy in one line
+await spark.deploy({
+  project: 'my-app',
+  env: 'production',
+  scale: 'auto',
+});
+
+console.log('Deployed! 🚀');`,
+      },
+      {
+        label: 'schema.ts',
+        language: 'typescript',
+        code: `import { Schema } from '@spark/core';
+
+export const UserSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'editor'],
+    default: 'editor',
+  },
+});`,
+      },
+    ],
+  },
+  feature_showcase: {
+    eyebrow: 'CAPABILITIES',
+    title: 'Everything your team needs',
+    subtitle: 'A complete platform built for modern development workflows.',
+    features: [
+      { icon: 'Zap', title: 'Blazing Fast Builds', description: 'Deploy in seconds with our optimized build pipeline.', badge: 'New' },
+      { icon: 'Shield', title: 'Enterprise Security', description: 'SOC2 compliant with end-to-end encryption.', badge: '' },
+      { icon: 'GitBranch', title: 'Branch Deployments', description: 'Every PR gets its own preview environment automatically.', badge: '' },
+      { icon: 'Globe', title: 'Global CDN', description: 'Serve your app from 200+ edge locations worldwide.', badge: '' },
+      { icon: 'BarChart', title: 'Analytics Built-in', description: 'Real-time metrics without extra setup.', badge: 'Beta' },
+      { icon: 'Code', title: 'API-First', description: 'Every feature accessible via our comprehensive REST API.', badge: '' },
+    ],
+  },
+  comparison_table: {
+    eyebrow: 'COMPARISON',
+    title: 'Why teams choose Spark',
+    subtitle: 'See how we stack up against the alternatives.',
+    competitors: ['Vercel', 'Netlify', 'Heroku'],
+    features: [
+      { name: 'Free tier', values: [true, true, true, false] },
+      { name: 'Auto-scaling', values: [true, true, false, true] },
+      { name: 'Edge functions', values: [true, true, true, false] },
+      { name: 'Team collaboration', values: [true, 'Paid', 'Paid', 'Paid'] },
+      { name: 'AI code review', values: [true, false, false, false] },
+      { name: '24/7 support', values: [true, 'Enterprise', 'Enterprise', false] },
+      { name: 'Custom domains', values: [true, true, true, true] },
+    ],
+  },
+  newsletter: {
+    eyebrow: 'STAY UPDATED',
+    title: 'Get the latest updates',
+    subtitle: 'No spam. Just product updates, tips, and occasional deep dives.',
+    placeholder: 'Enter your email address',
+    buttonText: 'Subscribe',
+    backgroundStyle: 'gradient',
+  },
+};

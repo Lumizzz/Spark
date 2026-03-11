@@ -26,6 +26,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
     primary_color: settings.primary_color || '#7C3AED',
     analytics_id: settings.analytics_id || '',
     maintenance_mode: settings.maintenance_mode || false,
+    registration_open: (settings as Record<string, unknown>)['registration_open'] as boolean || false,
   });
 
   const [navLinks, setNavLinks] = useState<NavLink[]>(settings.nav_links || []);

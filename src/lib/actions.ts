@@ -17,11 +17,31 @@ import type {
 } from '@/types';
 
 // ============================================================
+// HELPERS
+// ============================================================
+
+async function getAuthUser() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  return user;
+}
+
+async function getUserRole(userId: string): Promise<string | null> {
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('profiles')
+    .select('roles(name)')
+    .eq('id', userId)
+    .single();
+  return (data?.roles as { name: string } | null)?.name ?? null;
+}
+
+// ============================================================
 // SITE SETTINGS
 // ============================================================
 
 export async function getSiteSettings(): Promise<SiteSettings> {
-  const supabase = createClient();
+  const supabase = createAdminClient();
   const { data } = await supabase.from('site_settings').select('key, value');
 
   const defaults: SiteSettings = {
@@ -81,13 +101,21 @@ export async function updateSiteSettings(
 // ============================================================
 
 export async function getPageBySlug(slug: string): Promise<Page | null> {
-  const supabase = createClient();
+  const supabase = createAdminClient();
   const { data } = await supabase
     .from('pages')
     .select('*')
     .eq('slug', slug)
     .eq('status', 'published')
     .single();
+  return data;
+}
+
+export async function getPageBySlugWithPreview(slug: string, preview: boolean): Promise<Page | null> {
+  const supabase = preview ? createAdminClient() : createAdminClient();
+  const query = supabase.from('pages').select('*').eq('slug', slug);
+  if (!preview) query.eq('status', 'published');
+  const { data } = await query.single();
   return data;
 }
 
@@ -121,6 +149,36 @@ export async function createPage(
       slug,
       status: 'draft',
       layout: { sections: [] },
+      created_by: user.id,
+      updated_by: user.id,
+    })
+    .select()
+    .single();
+
+  if (error) return { data: null, error: error.message };
+  revalidatePath('/dashboard/pages');
+  return { data, error: null };
+}
+
+export async function duplicatePage(id: string): Promise<{ data: Page | null; error: string | null }> {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { data: null, error: 'Unauthorized' };
+
+  const { data: original } = await supabase.from('pages').select('*').eq('id', id).single();
+  if (!original) return { data: null, error: 'Page not found' };
+
+  const newSlug = `${original.slug}-copy-${Date.now().toString(36)}`;
+
+  const { data, error } = await supabase
+    .from('pages')
+    .insert({
+      title: `${original.title} (Copy)`,
+      slug: newSlug,
+      status: 'draft',
+      layout: original.layout,
+      meta_title: original.meta_title,
+      meta_description: original.meta_description,
       created_by: user.id,
       updated_by: user.id,
     })
@@ -168,7 +226,38 @@ export async function updatePageMeta(
   return { error: null };
 }
 
+export async function togglePageStatus(id: string): Promise<{ error: string | null }> {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: 'Unauthorized' };
+
+  const { data: page } = await supabase.from('pages').select('status').eq('id', id).single();
+  if (!page) return { error: 'Page not found' };
+
+  const newStatus = page.status === 'published' ? 'draft' : 'published';
+  const { error } = await supabase
+    .from('pages')
+    .update({
+      status: newStatus,
+      published_at: newStatus === 'published' ? new Date().toISOString() : null,
+      updated_by: user.id,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id);
+
+  if (error) return { error: error.message };
+  revalidatePath('/dashboard/pages');
+  revalidatePath('/');
+  return { error: null };
+}
+
 export async function deletePage(id: string): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+
+  const role = await getUserRole(user.id);
+  if (role !== 'admin') return { error: 'Only admins can delete pages' };
+
   const supabase = createClient();
   const { error } = await supabase.from('pages').delete().eq('id', id);
   if (error) return { error: error.message };
@@ -185,7 +274,7 @@ export async function getBlogPosts(options?: {
   limit?: number;
   categorySlug?: string;
 }): Promise<BlogPost[]> {
-  const supabase = createClient();
+  const supabase = createAdminClient();
   let query = supabase
     .from('blog_posts')
     .select('*, categories(*)')
@@ -199,7 +288,18 @@ export async function getBlogPosts(options?: {
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-  const supabase = createClient();
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('blog_posts')
+    .select('*, categories(*)')
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .single();
+  return data;
+}
+
+export async function getBlogPostBySlugAdmin(slug: string): Promise<BlogPost | null> {
+  const supabase = createAdminClient();
   const { data } = await supabase
     .from('blog_posts')
     .select('*, categories(*)')
@@ -267,7 +367,37 @@ export async function updateBlogPost(
   return { error: null };
 }
 
+export async function toggleBlogPostStatus(id: string): Promise<{ error: string | null }> {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: 'Unauthorized' };
+
+  const { data: post } = await supabase.from('blog_posts').select('status').eq('id', id).single();
+  if (!post) return { error: 'Post not found' };
+
+  const newStatus = post.status === 'published' ? 'draft' : 'published';
+  const { error } = await supabase
+    .from('blog_posts')
+    .update({
+      status: newStatus,
+      published_at: newStatus === 'published' ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id);
+
+  if (error) return { error: error.message };
+  revalidatePath('/blog');
+  revalidatePath('/dashboard/blog');
+  return { error: null };
+}
+
 export async function deleteBlogPost(id: string): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+
+  const role = await getUserRole(user.id);
+  if (role !== 'admin') return { error: 'Only admins can delete posts' };
+
   const supabase = createClient();
   const { error } = await supabase.from('blog_posts').delete().eq('id', id);
   if (error) return { error: error.message };
@@ -281,7 +411,7 @@ export async function deleteBlogPost(id: string): Promise<{ error: string | null
 // ============================================================
 
 export async function getCategories(): Promise<Category[]> {
-  const supabase = createClient();
+  const supabase = createAdminClient();
   const { data } = await supabase.from('categories').select('*').order('name');
   return data || [];
 }
@@ -298,12 +428,37 @@ export async function createCategory(
   return { error: null };
 }
 
+export async function updateCategory(
+  id: string,
+  name: string,
+  color: string
+): Promise<{ error: string | null }> {
+  const supabase = createClient();
+  const { error } = await supabase.from('categories').update({ name, color }).eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/dashboard/blog');
+  return { error: null };
+}
+
+export async function deleteCategory(id: string): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+  const role = await getUserRole(user.id);
+  if (role !== 'admin') return { error: 'Only admins can delete categories' };
+
+  const supabase = createClient();
+  const { error } = await supabase.from('categories').delete().eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/dashboard/blog');
+  return { error: null };
+}
+
 // ============================================================
 // PRICING
 // ============================================================
 
 export async function getPricingPlans(): Promise<PricingPlan[]> {
-  const supabase = createClient();
+  const supabase = createAdminClient();
   const { data } = await supabase
     .from('pricing_plans')
     .select('*, pricing_features(*)')
@@ -362,6 +517,11 @@ export async function updatePricingPlan(
 }
 
 export async function deletePricingPlan(id: string): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+  const role = await getUserRole(user.id);
+  if (role !== 'admin') return { error: 'Only admins can delete plans' };
+
   const supabase = createClient();
   const { error } = await supabase.from('pricing_plans').delete().eq('id', id);
   if (error) return { error: error.message };
@@ -419,6 +579,11 @@ export async function getMedia(): Promise<MediaItem[]> {
 }
 
 export async function deleteMedia(id: string, filename: string): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+  const role = await getUserRole(user.id);
+  if (role !== 'admin') return { error: 'Only admins can delete media' };
+
   const supabase = createClient();
   await supabase.storage.from('media').remove([filename]);
   const { error } = await supabase.from('media').delete().eq('id', id);
@@ -473,5 +638,200 @@ export async function updateUserRole(
 
   if (error) return { error: error.message };
   revalidatePath('/dashboard/users');
+  return { error: null };
+}
+
+// ============================================================
+// ACTIVITY / RECENT CHANGES
+// ============================================================
+
+export async function getRecentActivity(): Promise<{
+  type: string; title: string; action: string; time: string;
+}[]> {
+  const supabase = createAdminClient();
+
+  const [pages, posts] = await Promise.all([
+    supabase.from('pages').select('title, status, updated_at').order('updated_at', { ascending: false }).limit(5),
+    supabase.from('blog_posts').select('title, status, updated_at').order('updated_at', { ascending: false }).limit(5),
+  ]);
+
+  const items = [
+    ...(pages.data || []).map((p) => ({ type: 'page', title: p.title, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at })),
+    ...(posts.data || []).map((p) => ({ type: 'post', title: p.title, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at })),
+  ];
+
+  return items.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 8);
+}
+
+// ============================================================
+// USER INVITATIONS
+// ============================================================
+
+export async function inviteUser(
+  email: string,
+  roleName: 'admin' | 'editor'
+): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+  const role = await getUserRole(user.id);
+  if (role !== 'admin') return { error: 'Only admins can invite users' };
+
+  const supabase = createAdminClient();
+  const { data: roleData } = await supabase.from('roles').select('id').eq('name', roleName).single();
+
+  const { data: invited, error } = await supabase.auth.admin.inviteUserByEmail(email);
+  if (error) return { error: error.message };
+
+  // Create profile with role
+  if (invited?.user && roleData) {
+    await supabase.from('profiles').upsert({
+      id: invited.user.id,
+      email,
+      role_id: roleData.id,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'id' });
+  }
+
+  revalidatePath('/dashboard/users');
+  return { error: null };
+}
+
+export async function removeUser(userId: string): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+  if (user.id === userId) return { error: 'Cannot remove yourself' };
+  const role = await getUserRole(user.id);
+  if (role !== 'admin') return { error: 'Only admins can remove users' };
+
+  const supabase = createAdminClient();
+  const { error } = await supabase.auth.admin.deleteUser(userId);
+  if (error) return { error: error.message };
+  await supabase.from('profiles').delete().eq('id', userId);
+  revalidatePath('/dashboard/users');
+  return { error: null };
+}
+
+export async function updateUserProfile(
+  userId: string,
+  updates: { full_name?: string }
+): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+  if (user.id !== userId) {
+    const role = await getUserRole(user.id);
+    if (role !== 'admin') return { error: 'Unauthorized' };
+  }
+  const supabase = createClient();
+  const { error } = await supabase.from('profiles').update({ ...updates, updated_at: new Date().toISOString() }).eq('id', userId);
+  if (error) return { error: error.message };
+  revalidatePath('/dashboard/users');
+  return { error: null };
+}
+
+// ============================================================
+// NEWSLETTER SUBSCRIBERS
+// ============================================================
+
+export async function subscribeToNewsletter(
+  email: string,
+  name?: string,
+  source?: string
+): Promise<{ error: string | null }> {
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from('newsletter_subscribers')
+    .upsert(
+      { email: email.toLowerCase().trim(), name, source: source || 'website', status: 'subscribed', updated_at: new Date().toISOString() },
+      { onConflict: 'email' }
+    );
+  if (error) return { error: error.message };
+  return { error: null };
+}
+
+export async function getSubscribers(): Promise<{
+  id: string; email: string; name: string | null; status: string; source: string | null; created_at: string;
+}[]> {
+  const user = await getAuthUser();
+  if (!user) return [];
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('newsletter_subscribers')
+    .select('*')
+    .order('created_at', { ascending: false });
+  return data || [];
+}
+
+export async function unsubscribeEmail(id: string): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from('newsletter_subscribers')
+    .update({ status: 'unsubscribed', updated_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/dashboard/subscribers');
+  return { error: null };
+}
+
+export async function deleteSubscriber(id: string): Promise<{ error: string | null }> {
+  const user = await getAuthUser();
+  if (!user) return { error: 'Unauthorized' };
+  const role = await getUserRole(user.id);
+  if (role !== 'admin') return { error: 'Only admins can delete subscribers' };
+  const supabase = createAdminClient();
+  const { error } = await supabase.from('newsletter_subscribers').delete().eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/dashboard/subscribers');
+  return { error: null };
+}
+
+// ============================================================
+// USER SELF-REGISTRATION (admin-controlled)
+// ============================================================
+
+export async function checkRegistrationOpen(): Promise<boolean> {
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('site_settings')
+    .select('value')
+    .eq('key', 'registration_open')
+    .single();
+  return data?.value === true;
+}
+
+export async function selfRegister(
+  email: string,
+  password: string,
+  fullName: string
+): Promise<{ error: string | null }> {
+  // Check registration is open
+  const open = await checkRegistrationOpen();
+  if (!open) return { error: 'Registration is currently closed. Contact an administrator.' };
+
+  const supabase = createAdminClient();
+
+  // Create auth user
+  const { data, error } = await supabase.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: false, // will trigger confirmation email
+    user_metadata: { full_name: fullName },
+  });
+
+  if (error) return { error: error.message };
+
+  // Create profile with editor role (default, safe)
+  if (data.user) {
+    const { data: editorRole } = await supabase.from('roles').select('id').eq('name', 'editor').single();
+    await supabase.from('profiles').upsert({
+      id: data.user.id,
+      email,
+      full_name: fullName,
+      role_id: editorRole?.id,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'id' });
+  }
+
   return { error: null };
 }

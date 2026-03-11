@@ -188,7 +188,7 @@ export function RichTextBlock({ props }: { props: RichTextProps }) {
 // ========================
 export function GalleryBlock({ props }: { props: GalleryProps }) {
   const { title, images, columns = 3 } = props;
-  const colMap = { 2: 'grid-cols-2', 3: 'grid-cols-3', 4: 'grid-cols-4' };
+  const colMap = { 2: 'grid-cols-1 sm:grid-cols-2', 3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3', 4: 'grid-cols-2 lg:grid-cols-4' };
 
   return (
     <section className="py-24 px-6">
@@ -242,6 +242,11 @@ export function BlogListBlock({ props, posts }: { props: BlogListProps; posts: B
   return (
     <section className="py-16 px-6">
       <div className="max-w-7xl mx-auto">
+        {posts.length === 0 && (
+          <div className="col-span-full py-16 text-center">
+            <p className="text-slate-500 text-sm">No posts yet.</p>
+          </div>
+        )}
         <div className={`grid gap-8 ${props.layout === 'list' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
           {posts.map((post, i) => (
             <motion.article

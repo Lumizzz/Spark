@@ -170,7 +170,15 @@ export type BlockType =
   | 'blog_list'
   | 'rich_text'
   | 'gallery'
-  | 'logo_strip';
+  | 'logo_strip'
+  | 'stats_bar'
+  | 'code_showcase'
+  | 'feature_showcase'
+  | 'comparison_table'
+  | 'newsletter'
+  | 'timeline'
+  | 'team_grid'
+  | 'video_embed';
 
 // Each block's props
 export type HeroProps = {
@@ -283,7 +291,15 @@ export type BlockProps =
   | BlogListProps
   | RichTextProps
   | GalleryProps
-  | LogoStripProps;
+  | LogoStripProps
+  | StatsBarProps
+  | CodeShowcaseProps
+  | FeatureShowcaseProps
+  | ComparisonTableProps
+  | NewsletterProps
+  | TimelineProps
+  | TeamGridProps
+  | VideoEmbedProps;
 
 // ============================================================
 // Form Types
@@ -325,4 +341,92 @@ export type PricingPlanFormData = {
 export type ApiResponse<T> = {
   data: T | null;
   error: string | null;
+};
+
+// ============================================================
+// NEW BLOCK TYPES
+// ============================================================
+
+export type StatsBarProps = {
+  eyebrow?: string;
+  title?: string;
+  stats: StatItem[];
+  background?: 'transparent' | 'dark' | 'gradient';
+};
+
+export type StatItem = {
+  value: string;
+  label: string;
+  prefix?: string;
+  suffix?: string;
+  description?: string;
+};
+
+export type CodeShowcaseProps = {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  tabs: CodeTab[];
+  imageUrl?: string;
+  imagePosition?: 'left' | 'right';
+};
+
+export type CodeTab = {
+  label: string;
+  language: string;
+  code: string;
+};
+
+export type FeatureShowcaseProps = {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  features: ShowcaseFeature[];
+};
+
+export type ShowcaseFeature = {
+  icon?: string;
+  title: string;
+  description: string;
+  badge?: string;
+  imageUrl?: string;
+};
+
+export type ComparisonTableProps = {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  competitors: string[];
+  features: ComparisonFeature[];
+};
+
+export type ComparisonFeature = {
+  name: string;
+  values: (boolean | string)[];
+};
+
+export type NewsletterProps = {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  placeholder?: string;
+  buttonText?: string;
+  backgroundStyle?: 'dark' | 'gradient' | 'purple';
+};
+
+
+// ─── EXTRA BLOCK TYPES ───────────────────────────────────────
+export type TimelineProps = {
+  eyebrow?: string; title?: string; subtitle?: string;
+  items: { year: string; title: string; description: string; badge?: string }[];
+};
+
+export type TeamGridProps = {
+  eyebrow?: string; title?: string; subtitle?: string;
+  members: { name: string; role: string; bio?: string; avatar?: string }[];
+};
+
+export type VideoEmbedProps = {
+  eyebrow?: string; title?: string; subtitle?: string;
+  videoUrl: string; thumbnailUrl?: string; aspectRatio?: '16:9' | '4:3' | '1:1';
 };

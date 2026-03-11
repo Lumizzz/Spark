@@ -1,26 +1,23 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { createClient, createAdminClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import { getPricingPlans, getBlogPosts } from '@/lib/actions';
 import BlockRenderer from '@/components/blocks/BlockRenderer';
 import type { PageSection, Page } from '@/types';
 
 type Props = {
   params: { slug: string };
+  searchParams: { preview?: string };
 };
 
-async function getPage(slug: string): Promise<Page | null> {
-  const supabase = createClient();
-  const { data } = await supabase
-    .from('pages')
-    .select('*')
-    .eq('slug', slug)
-    .eq('status', 'published')
-    .single();
+async function getPage(slug: string, preview: boolean): Promise<Page | null> {
+  const supabase = createAdminClient();
+  const query = supabase.from('pages').select('*').eq('slug', slug);
+  if (!preview) query.eq('status', 'published');
+  const { data } = await query.single();
   return data;
 }
 
-// Uses admin client — no cookies() call, safe at build time
 export async function generateStaticParams() {
   const supabase = createAdminClient();
   const { data } = await supabase.from('pages').select('slug').eq('status', 'published');
@@ -28,7 +25,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const page = await getPage(params.slug);
+  const page = await getPage(params.slug, false);
   if (!page) return {};
   return {
     title: page.meta_title || page.title,
@@ -37,8 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function DynamicPage({ params }: Props) {
-  const page = await getPage(params.slug);
+export default async function DynamicPage({ params, searchParams }: Props) {
+  const isPreview = searchParams?.preview === 'true';
+  const page = await getPage(params.slug, isPreview);
   if (!page) notFound();
 
   const sections: PageSection[] = (page.layout?.sections || []).sort(
@@ -55,13 +53,13 @@ export default async function DynamicPage({ params }: Props) {
 
   return (
     <>
+      {isPreview && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-yellow-500 text-black text-xs font-semibold shadow-lg">
+          📝 Preview mode — <a href={`/${params.slug}`} className="underline">Exit preview</a>
+        </div>
+      )}
       {sections.map((section: PageSection) => (
-        <BlockRenderer
-          key={section.id}
-          section={section}
-          pricingPlans={pricingPlans}
-          blogPosts={blogPosts}
-        />
+        <BlockRenderer key={section.id} section={section} pricingPlans={pricingPlans} blogPosts={blogPosts} />
       ))}
     </>
   );

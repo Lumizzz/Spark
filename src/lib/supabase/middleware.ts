@@ -25,6 +25,29 @@ export async function updateSession(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
+  // Maintenance mode check
+  const maintenanceKey = 'maintenance_mode';
+  const isPublicPath = 
+    request.nextUrl.pathname.startsWith('/auth') ||
+    request.nextUrl.pathname.startsWith('/dashboard') ||
+    request.nextUrl.pathname.startsWith('/_next') ||
+    request.nextUrl.pathname.startsWith('/api');
+
+  if (!isPublicPath && !user) {
+    const { data: maintenanceData } = await supabase
+      .from('site_settings')
+      .select('value')
+      .eq('key', maintenanceKey)
+      .single();
+
+    if (maintenanceData?.value === true) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/auth/login';
+      url.searchParams.set('reason', 'maintenance');
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Protect /dashboard routes
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     if (!user) {
