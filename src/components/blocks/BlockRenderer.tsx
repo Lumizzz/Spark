@@ -1,3 +1,4 @@
+import React from 'react';
 import type { PageSection, PricingPlan, BlogPost } from '@/types';
 import HeroBlock from './HeroBlock';
 import FeaturesGridBlock from './FeaturesGridBlock';
@@ -8,7 +9,8 @@ import { StatsBarBlock, CodeShowcaseBlock, FeatureShowcaseBlock, ComparisonTable
 import type { TimelineProps, TeamGridProps, VideoEmbedProps } from './NewBlocks';
 import type { StatsBarProps, CodeShowcaseProps, FeatureShowcaseProps, ComparisonTableProps, NewsletterProps } from '@/types';
 
-export interface BlockRendererProps {
+interface BlockRendererProps {
+  key?: string;
   section: PageSection;
   pricingPlans?: PricingPlan[];
   blogPosts?: BlogPost[];

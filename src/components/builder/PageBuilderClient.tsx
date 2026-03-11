@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import { generateId } from '@/lib/utils';
 import BlockPropsEditor from './BlockPropsEditor';
-import { DEFAULT_BLOCK_PROPS, NEW_BLOCK_DEFAULTS } from './blockDefaults';
+import { DEFAULT_BLOCK_PROPS } from './blockDefaults';
 
 interface PageBuilderClientProps {
   page: Page;
@@ -63,6 +63,14 @@ function SortableSection({
     rich_text: '✍️ Rich Text',
     gallery: '🖼 Gallery',
     logo_strip: '🏢 Logo Strip',
+    stats_bar: '📊 Stats Bar',
+    code_showcase: '💻 Code Showcase',
+    feature_showcase: '✨ Feature Showcase',
+    comparison_table: '⚖️ Comparison Table',
+    newsletter: '📧 Newsletter',
+    timeline: '🕐 Timeline',
+    team_grid: '👥 Team Grid',
+    video_embed: '🎬 Video Embed',
   };
 
   return (

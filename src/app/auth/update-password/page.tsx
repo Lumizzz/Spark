@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -59,7 +60,7 @@ export default function UpdatePasswordPage() {
                 <div>
                   <label className="block text-sm text-slate-300 mb-1.5">New password</label>
                   <div className="relative">
-                    <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8}
+                    <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} required minLength={8}
                       placeholder="Min. 8 characters"
                       className="w-full px-4 py-3 pr-12 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500/50 text-sm" />
                     <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
@@ -69,7 +70,7 @@ export default function UpdatePasswordPage() {
                 </div>
                 <div>
                   <label className="block text-sm text-slate-300 mb-1.5">Confirm password</label>
-                  <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required
+                  <input type="password" value={confirm} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirm(e.target.value)} required
                     placeholder="Repeat your password"
                     className={`w-full px-4 py-3 rounded-xl bg-white/5 border text-white placeholder-slate-600 focus:outline-none text-sm transition-colors ${confirm && confirm !== password ? 'border-red-500/50' : 'border-white/10 focus:border-purple-500/50'}`} />
                   {confirm && confirm !== password && <p className="text-red-400 text-xs mt-1">Passwords do not match</p>}

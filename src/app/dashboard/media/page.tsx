@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState, useEffect } from 'react';
 import { Upload, Trash2, Copy, Image as ImageIcon, Check } from 'lucide-react';
@@ -54,7 +55,7 @@ export default function MediaDashboardPage() {
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+    const files = Array.from(e.target.files || []) as File[];
     if (!files.length) return;
     setUploading(true);
     try {
@@ -68,7 +69,8 @@ export default function MediaDashboardPage() {
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
-    const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'));
+    const allFiles = Array.from(e.dataTransfer.files) as File[];
+    const files = allFiles.filter((f) => f.type.startsWith('image/'));
     if (!files.length) return;
     setUploading(true);
     try {
@@ -118,7 +120,7 @@ export default function MediaDashboardPage() {
 
       {/* Drop zone */}
       <div
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragOver={(e: React.DragEvent) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
         className={`rounded-2xl border-2 border-dashed p-8 text-center mb-6 transition-all ${
@@ -147,7 +149,7 @@ export default function MediaDashboardPage() {
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {media.map((item) => (
+          {media.map((item: import("@/types").MediaItem) => (
             <div key={item.id} className="group relative aspect-square rounded-xl overflow-hidden glass-card">
               <Image
                 src={item.url}

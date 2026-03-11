@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -92,7 +93,7 @@ export default function SignUpPage() {
                 <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Full name</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
-                  <input type="text" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                  <input type="text" value={form.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm((f: typeof form) => ({ ...f, name: e.target.value }))}
                     placeholder="Jane Smith"
                     className={`${inputClass('name')} pl-9`} />
                 </div>
@@ -104,7 +105,7 @@ export default function SignUpPage() {
                 <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
-                  <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                  <input type="email" value={form.email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm((f: typeof form) => ({ ...f, email: e.target.value }))}
                     placeholder="jane@company.com"
                     className={`${inputClass('email')} pl-9`} />
                 </div>
@@ -117,7 +118,7 @@ export default function SignUpPage() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
                   <input type={showPassword ? 'text' : 'password'} value={form.password}
-                    onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm((f: typeof form) => ({ ...f, password: e.target.value }))}
                     placeholder="Min. 8 characters"
                     className={`${inputClass('password')} pl-9 pr-10`} />
                   <button type="button" onClick={() => setShowPassword(!showPassword)}
@@ -144,7 +145,7 @@ export default function SignUpPage() {
               <div>
                 <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Confirm password</label>
                 <input type="password" value={form.confirm}
-                  onChange={e => setForm(f => ({ ...f, confirm: e.target.value }))}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm((f: typeof form) => ({ ...f, confirm: e.target.value }))}
                   placeholder="Repeat your password"
                   className={inputClass('confirm')} />
                 {errors.confirm && <p className="text-red-400 text-xs mt-1">{errors.confirm}</p>}

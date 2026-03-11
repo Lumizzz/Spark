@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -83,7 +84,7 @@ export default function SubscribersClient({ subscribers }: { subscribers: Sub[] 
         <div className="flex items-center gap-4 px-5 py-3 border-b border-white/5 flex-wrap">
           <div className="flex items-center gap-2 flex-1">
             <Search className="w-4 h-4 text-slate-600 shrink-0" />
-            <input value={search} onChange={e => setSearch(e.target.value)}
+            <input value={search} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
               placeholder="Search by email or name..."
               className="flex-1 bg-transparent text-white text-sm placeholder-slate-700 focus:outline-none min-w-0" />
           </div>

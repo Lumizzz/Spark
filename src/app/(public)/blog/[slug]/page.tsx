@@ -30,7 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const post = await getBlogPostBySlug(params.slug);
-  if (!post) notFound();
+  if (!post) return notFound();
+  const safePost = post;
 
   return (
     <>
@@ -40,39 +41,39 @@ export default async function BlogPostPage({ params }: Props) {
           <ArrowLeft className="w-4 h-4" /> Back to blog
         </Link>
 
-        {post.categories && (
+        {safePost.categories && (
           <span className="text-xs font-semibold px-2 py-1 rounded-md mb-4 inline-block"
-            style={{ background: `${post.categories.color}20`, color: post.categories.color }}>
-            {post.categories.name}
+            style={{ background: `${safePost.categories.color}20`, color: safePost.categories.color }}>
+            {safePost.categories.name}
           </span>
         )}
 
         <h1 className="text-4xl md:text-5xl font-bold gradient-text mt-3 mb-4 leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
-          {post.title}
+          {safePost.title}
         </h1>
 
         <div className="flex items-center gap-4 text-slate-500 text-sm mb-8">
-          <span>{formatDate(post.published_at)}</span>
+          <span>{formatDate(safePost.published_at)}</span>
           <span className="flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5" /> {post.read_time} min read
+            <Clock className="w-3.5 h-3.5" /> {safePost.read_time} min read
           </span>
         </div>
 
-        {post.featured_image && (
+        {safePost.featured_image && (
           <div className="relative rounded-2xl overflow-hidden aspect-video mb-10">
-            <Image src={post.featured_image} alt={post.title} fill className="object-cover" />
+            <Image src={safePost.featured_image} alt={safePost.title} fill className="object-cover" />
           </div>
         )}
 
-        {post.excerpt && (
-          <p className="text-lg text-slate-300 leading-relaxed mb-8 border-l-2 border-purple-500 pl-4 italic">{post.excerpt}</p>
+        {safePost.excerpt && (
+          <p className="text-lg text-slate-300 leading-relaxed mb-8 border-l-2 border-purple-500 pl-4 italic">{safePost.excerpt}</p>
         )}
 
-        <div className="prose-dark" dangerouslySetInnerHTML={{ __html: post.content }} />
+        <div className="prose-dark" dangerouslySetInnerHTML={{ __html: safePost.content }} />
 
-        {post.tags && post.tags.length > 0 && (
+        {safePost.tags && safePost.tags.length > 0 && (
           <div className="mt-12 pt-8 border-t border-white/5 flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
+            {safePost.tags.map((tag) => (
               <span key={tag} className="px-3 py-1 glass-card rounded-full text-xs text-slate-400">#{tag}</span>
             ))}
           </div>

@@ -1,3 +1,4 @@
+import React from 'react';
 import { redirect } from 'next/navigation';
 import { Toaster } from 'react-hot-toast';
 import { getCurrentUser } from '@/lib/actions';
@@ -10,8 +11,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <div className="min-h-screen flex" style={{ background: 'var(--color-bg)' }}>
-      <DashboardSidebar user={user} />
-      <DashboardShell>{children}</DashboardShell>
+      <DashboardSidebar user={user!} />
+      <DashboardShell children={children} />
       <Toaster
         position="top-right"
         toastOptions={{

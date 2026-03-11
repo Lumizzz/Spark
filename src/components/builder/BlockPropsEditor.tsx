@@ -1,6 +1,5 @@
 'use client';
-
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type {
   PageSection, BlockProps, HeroProps, FeaturesGridProps, CTASectionProps,
   FAQSectionProps, ImageTextProps, RichTextProps, GalleryProps, LogoStripProps,
@@ -31,7 +30,7 @@ function Input({ value, onChange, placeholder, type = 'text' }: {
     <input
       type={type}
       value={value ?? ''}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
       placeholder={placeholder}
       className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-purple-500/50 transition-colors"
     />
@@ -44,7 +43,7 @@ function Textarea({ value, onChange, placeholder, rows = 3 }: {
   return (
     <textarea
       value={value ?? ''}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
       placeholder={placeholder}
       rows={rows}
       className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-purple-500/50 transition-colors resize-none"
@@ -58,7 +57,7 @@ function Select({ value, onChange, options }: {
   return (
     <select
       value={value ?? ''}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
       className="w-full px-3 py-2 rounded-lg bg-[#0a0a1a] border border-white/10 text-white text-xs focus:outline-none focus:border-purple-500/50"
     >
       {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -105,7 +104,7 @@ function ImagePickerField({ label, value, onChange, hint }: {
           </div>
         )}
         <div className="flex gap-2">
-          <input type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder="https://... or pick from library"
+          <input type="text" value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} placeholder="https://... or pick from library"
             className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-purple-500/50 transition-colors" />
           <button onClick={() => setOpen(true)}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/30 text-purple-400 text-xs font-medium transition-all shrink-0">
@@ -294,7 +293,7 @@ function GalleryEditor({ props, onChange }: { props: GalleryProps; onChange: (p:
           </div>
           {img.url && <img src={img.url} alt={img.alt} className="w-full h-20 object-cover rounded-lg" />}
           <div className="flex gap-2">
-            <input type="text" value={img.url} onChange={(e) => updateImage(i, 'url', e.target.value)} placeholder="Image URL"
+            <input type="text" value={img.url} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateImage(i, 'url', e.target.value)} placeholder="Image URL"
               className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-purple-500/50" />
             <button onClick={() => setPickerIndex(i)}
               className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/30 text-purple-400 text-xs transition-all shrink-0">
@@ -363,7 +362,7 @@ function TestimonialsEditor({ props, onChange }: { props: TestimonialsProps; onC
           <div className="flex items-end gap-2">
             <div className="flex-1">
               <Field label="Avatar URL">
-                <input type="text" value={t.avatar || ''} onChange={(e) => update(i, 'avatar', e.target.value)} placeholder="https://..."
+                <input type="text" value={t.avatar || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => update(i, 'avatar', e.target.value)} placeholder="https://..."
                   className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-purple-500/50" />
               </Field>
             </div>

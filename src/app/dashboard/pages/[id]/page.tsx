@@ -8,9 +8,9 @@ type Props = { params: { id: string } };
 
 export default async function PageBuilderPage({ params }: Props) {
   const page = await getPageById(params.id);
-  if (!page) notFound();
+  if (!page) return notFound(); const safePage = page;
 
-  const previewHref = page.slug === 'home' ? '/?preview=true' : `/${page.slug}?preview=true`;
+  const previewHref = safePage.slug === 'home' ? '/?preview=true' : `/${safePage.slug}?preview=true`;
 
   return (
     <div className="h-screen flex flex-col -m-4 md:-m-8 overflow-hidden">
@@ -20,8 +20,8 @@ export default async function PageBuilderPage({ params }: Props) {
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <p className="text-white text-sm font-medium">{page.title}</p>
-            <p className="text-slate-500 text-xs">/{page.slug}</p>
+            <p className="text-white text-sm font-medium">{page!.title}</p>
+            <p className="text-slate-500 text-xs">/{safePage.slug}</p>
           </div>
         </div>
         <a href={previewHref} target="_blank" rel="noopener noreferrer"

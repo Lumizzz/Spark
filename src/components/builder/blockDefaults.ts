@@ -84,10 +84,7 @@ export const DEFAULT_BLOCK_PROPS: Record<BlockType, BlockProps> = {
     title: 'Trusted by teams at',
     logos: ['Company A', 'Company B', 'Company C', 'Company D', 'Company E'],
   },
-};
 
-// New block defaults
-export const NEW_BLOCK_DEFAULTS = {
   stats_bar: {
     eyebrow: 'BY THE NUMBERS',
     title: 'Trusted by teams worldwide',
@@ -177,5 +174,35 @@ export const UserSchema = new Schema({
     placeholder: 'Enter your email address',
     buttonText: 'Subscribe',
     backgroundStyle: 'gradient',
+  },
+
+  timeline: {
+    eyebrow: 'OUR JOURNEY',
+    title: 'How we got here',
+    subtitle: 'A brief history of what we have built.',
+    items: [
+      { year: '2021', title: 'Founded', description: 'Started with a small team and a big idea to change how developers deploy software.', badge: 'Origin' },
+      { year: '2022', title: 'Series A', description: 'Raised $5M to grow the team and expand our infrastructure globally.', badge: '$5M' },
+      { year: '2023', title: '100k Users', description: 'Hit our first major milestone: 100,000 active developers on the platform.', badge: '🎉' },
+      { year: '2024', title: 'Series B', description: 'Raised $20M to accelerate AI features and international expansion.', badge: '$20M' },
+    ],
+  },
+  team_grid: {
+    eyebrow: 'THE TEAM',
+    title: 'Built by people who care',
+    subtitle: 'We are a distributed team passionate about developer experience.',
+    members: [
+      { name: 'Alex Rivera', role: 'CEO & Co-founder', bio: 'Previously at Stripe and GitHub. Passionate about developer tools.' },
+      { name: 'Sam Chen', role: 'CTO & Co-founder', bio: 'Built distributed systems at Cloudflare. Loves Rust and fast code.' },
+      { name: 'Jordan Kim', role: 'Head of Design', bio: 'Former design lead at Linear. Obsessed with pixels and performance.' },
+      { name: 'Taylor Moss', role: 'Head of Growth', bio: 'Helped scale Vercel from 0 to 1M users. Growth and community.' },
+    ],
+  },
+  video_embed: {
+    eyebrow: 'SEE IT IN ACTION',
+    title: 'Watch the demo',
+    subtitle: 'See how Spark helps teams ship 10× faster in under 3 minutes.',
+    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    aspectRatio: '16:9',
   },
 };

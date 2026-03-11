@@ -20,8 +20,10 @@ async function getPage(slug: string, preview: boolean): Promise<Page | null> {
 
 export async function generateStaticParams() {
   const supabase = createAdminClient();
-  const { data } = await supabase.from('pages').select('slug').eq('status', 'published');
-  return (data || []).map((p) => ({ slug: p.slug }));
+  const { data } = await supabase.from('pages').select('slug, status');
+  return ((data || []) as { slug: string; status: string }[])
+    .filter((p) => p.status === 'published')
+    .map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -37,18 +39,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function DynamicPage({ params, searchParams }: Props) {
   const isPreview = searchParams?.preview === 'true';
   const page = await getPage(params.slug, isPreview);
-  if (!page) notFound();
+  if (!page) return notFound();
 
-  const sections: PageSection[] = (page.layout?.sections || []).sort(
-    (a: PageSection, b: PageSection) => a.order - b.order
-  );
+  const sections: PageSection[] = ((page.layout as { sections?: PageSection[] } | null)?.sections || [])
+    .sort((a: PageSection, b: PageSection) => a.order - b.order);
 
   const needsPricing = sections.some((s) => s.type === 'pricing_table');
   const needsBlog = sections.some((s) => s.type === 'blog_list');
 
   const [pricingPlans, blogPosts] = await Promise.all([
-    needsPricing ? getPricingPlans() : Promise.resolve([]),
-    needsBlog ? getBlogPosts({ status: 'published', limit: 9 }) : Promise.resolve([]),
+    needsPricing ? getPricingPlans() : Promise.resolve([] as import("@/types").PricingPlan[]),
+    needsBlog ? getBlogPosts({ status: 'published', limit: 9 }) : Promise.resolve([] as import('@/types').BlogPost[]),
   ]);
 
   return (
@@ -58,7 +59,7 @@ export default async function DynamicPage({ params, searchParams }: Props) {
           📝 Preview mode — <a href={`/${params.slug}`} className="underline">Exit preview</a>
         </div>
       )}
-      {sections.map((section: PageSection) => (
+      {sections.map((section) => (
         <BlockRenderer key={section.id} section={section} pricingPlans={pricingPlans} blogPosts={blogPosts} />
       ))}
     </>

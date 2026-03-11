@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -72,7 +73,7 @@ export default function CategoriesClient({ categories: initial }: { categories: 
         <div className="glass-card rounded-2xl p-6 mb-6">
           <h3 className="text-white font-semibold mb-4">New Category</h3>
           <div className="flex items-center gap-4">
-            <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Category name"
+            <input value={newName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewName(e.target.value)} placeholder="Category name"
               className="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500/50 text-sm" />
             <div className="flex gap-2">
               {PRESET_COLORS.map((c) => (
@@ -102,11 +103,11 @@ export default function CategoriesClient({ categories: initial }: { categories: 
           </div>
         ) : (
           <div className="divide-y divide-white/5">
-            {categories.map((cat) => (
+            {categories.map((cat: Category) => (
               <div key={cat.id} className="px-6 py-4 flex items-center gap-4">
                 {editingId === cat.id ? (
                   <>
-                    <input value={editName} onChange={(e) => setEditName(e.target.value)}
+                    <input value={editName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditName(e.target.value)}
                       className="flex-1 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50" />
                     <div className="flex gap-2">
                       {PRESET_COLORS.map((c) => (

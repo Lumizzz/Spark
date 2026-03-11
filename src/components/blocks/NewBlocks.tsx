@@ -266,7 +266,7 @@ export function NewsletterBlock({ props }: { props: NewsletterProps }) {
             <form onSubmit={handleSubmit} className="flex gap-2">
               <div className="relative flex-1">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder={placeholder}
+                <input type="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} required placeholder={placeholder}
                   className="w-full pl-9 pr-4 py-3 rounded-xl admin-search-input text-sm text-white" />
               </div>
               <button type="submit" disabled={loading}

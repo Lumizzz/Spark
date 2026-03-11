@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -23,13 +24,13 @@ export default function NewPagePage() {
     setTitle(val);
     if (!slugEdited) setSlug(slugify(val));
     // Clear error on change
-    if (errors.title) setErrors((e) => ({ ...e, title: undefined }));
+    if (errors.title) setErrors((prev: Record<string, string | undefined>) => ({ ...prev, title: undefined }));
   };
 
   const handleSlugChange = (val: string) => {
     setSlug(slugify(val));
     setSlugEdited(true);
-    if (errors.slug) setErrors((e) => ({ ...e, slug: undefined }));
+    if (errors.slug) setErrors((prev: Record<string, string | undefined>) => ({ ...prev, slug: undefined }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -89,7 +90,7 @@ export default function NewPagePage() {
           <input
             type="text"
             value={title}
-            onChange={(e) => handleTitleChange(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTitleChange(e.target.value)}
             placeholder="e.g. Landing Page"
             className={inputClass('title')}
             autoFocus
@@ -112,7 +113,7 @@ export default function NewPagePage() {
             <input
               type="text"
               value={slug}
-              onChange={(e) => handleSlugChange(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSlugChange(e.target.value)}
               placeholder="my-page"
               className={`flex-1 px-4 py-3 rounded-r-xl bg-white/5 border text-white placeholder-slate-600 focus:outline-none text-sm transition-colors ${
                 errors.slug ? 'border-red-500/60 focus:border-red-500' : 'border-white/10 focus:border-purple-500/50'
