@@ -4,15 +4,19 @@ import { Toaster } from 'react-hot-toast';
 import { getCurrentUser } from '@/lib/actions';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import DashboardShell from '@/components/dashboard/DashboardShell';
+import AnimatedBackground from '@/components/public/AnimatedBackground';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
   if (!user) redirect('/auth/login');
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'var(--color-bg)' }}>
-      <DashboardSidebar user={user!} />
-      <DashboardShell children={children} />
+    <div className="min-h-screen flex relative" style={{ background: 'var(--color-bg)' }}>
+      <AnimatedBackground />
+      <div className="relative z-10 flex w-full min-h-screen">
+        <DashboardSidebar user={user!} />
+        <DashboardShell children={children} />
+      </div>
       <Toaster
         position="top-right"
         toastOptions={{

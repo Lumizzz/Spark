@@ -146,11 +146,11 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
             <Mail className="w-4 h-4 text-violet-400" /> Send an invite
           </h3>
           <form onSubmit={handleInvite} className="flex gap-3 flex-wrap">
-            <input type="email" value={inviteEmail} onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setInviteEmail(e.target.value)} required
+            <input type="email" value={inviteEmail} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInviteEmail(e.target.value)} required
               placeholder="teammate@company.com"
               className="flex-1 min-w-48 px-4 py-2.5 rounded-xl admin-search-input text-sm" />
             <div className="relative">
-              <select value={inviteRole} onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setInviteRole(e.target.value as 'admin' | 'editor')}
+              <select value={inviteRole} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setInviteRole(e.target.value as 'admin' | 'editor')}
                 className="appearance-none px-4 py-2.5 pr-8 rounded-xl admin-search-input text-sm cursor-pointer">
                 <option value="editor" style={{ background: '#06060f' }}>Editor role</option>
                 <option value="admin" style={{ background: '#06060f' }}>Admin role</option>
@@ -175,7 +175,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
         {/* Search bar */}
         <div className="flex items-center gap-3 px-5 py-3 border-b border-white/5">
           <Search className="w-4 h-4 text-slate-600 shrink-0" />
-          <input value={search} onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setSearch(e.target.value)}
+          <input value={search} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
             placeholder="Search members..."
             className="flex-1 bg-transparent text-white text-sm placeholder-slate-700 focus:outline-none" />
           <span className="text-xs text-slate-700">{filtered.length} of {users.length}</span>
@@ -211,7 +211,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
                     <div className="min-w-0">
                       {editingNameId === user.id ? (
                         <div className="flex items-center gap-1.5">
-                          <input value={editName} onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setEditName(e.target.value)}
+                          <input value={editName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditName(e.target.value)}
                             className="px-2.5 py-1 rounded-lg admin-search-input text-xs text-white w-36"
                             placeholder="Full name" autoFocus />
                           <button onClick={() => handleNameSave(user.id)} disabled={saving}
@@ -238,7 +238,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
                     {isAdmin && !isMe ? (
                       <div className="relative w-fit">
                         <select defaultValue={roleName}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => handleRoleChange(user.id, e.target.value as 'admin' | 'editor')}
+                          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleRoleChange(user.id, e.target.value as 'admin' | 'editor')}
                           disabled={saving}
                           className={`appearance-none pl-6 pr-6 py-1 rounded-lg text-xs font-semibold cursor-pointer focus:outline-none border ${rc.chipClass}`}
                           style={{ background: 'transparent' }}>
@@ -279,19 +279,19 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
               );
             })}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Permission Matrix toggle */}
-      <div className="gradient-border-card overflow-hidden">
-        <button onClick={() => setShowMatrix(!showMatrix)}
-          className="w-full flex items-center justify-between px-5 py-4 text-sm font-semibold text-white hover:bg-white/2 transition-colors">
+      <div className="gradient-border-card">
+        <button type="button" onClick={() => setShowMatrix(prev => !prev)}
+          className="w-full flex items-center justify-between px-5 py-4 text-sm font-semibold text-white hover:bg-white/5 transition-colors">
           <span className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-violet-400" /> Permission Matrix
           </span>
-          <ChevronDown className={`w-4 h-4 text-slate-600 transition-transform ${showMatrix ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${showMatrix ? 'rotate-180' : ''}`} />
         </button>
-        {showMatrix && (
+        <div className={`transition-all duration-200 ${showMatrix ? 'block' : 'hidden'}`}>
           <div className="overflow-x-auto border-t border-white/5">
             <table className="w-full text-xs">
               <thead>
@@ -316,7 +316,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
               </tbody>
             </table>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

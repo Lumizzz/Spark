@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { getSiteSettings } from '@/lib/actions';
-import { Check, X, Zap, Shield, GitBranch, Globe, BarChart2, Code2, Terminal, Users, ArrowRight, Star, Play } from 'lucide-react';
+import { Check, X, Zap, Shield, GitBranch, Globe, BarChart2, Code2, Terminal, Users, ArrowRight, Star, Play, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -68,7 +68,7 @@ export default async function ProductPage() {
   const settings = await getSiteSettings();
 
   return (
-    <div style={{ background: 'var(--color-bg)' }}>
+    <div>
 
       {/* ── HERO ──────────────────────────────────────────── */}
       <section className="relative pt-40 pb-24 px-6 overflow-hidden">
@@ -284,7 +284,6 @@ export default async function ProductPage() {
 }
 
 function FAQSection() {
-  'use client';
   const faqs = [
     { q: 'What languages does Spark support?', a: 'Spark supports JavaScript, TypeScript, Python, Go, Rust, Ruby, and more. If your language has a runtime, we can run it.' },
     { q: 'Does Spark write perfect code?', a: 'Our AI assistant significantly reduces errors and suggests best practices, but all suggestions should be reviewed by your team.' },
@@ -313,6 +312,3 @@ function FAQSection() {
     </section>
   );
 }
-
-// Need to import ChevronRight for FAQ
-import { ChevronRight } from 'lucide-react';

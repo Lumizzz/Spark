@@ -65,7 +65,7 @@ export default function OnboardingChecklist() {
 
   if (allDone) {
     return (
-      <div className="fixed bottom-24 right-6 z-40 onboarding-card">
+      <div className="fixed bottom-6 left-[272px] z-40 onboarding-card">
         <div className="gradient-border-card p-5 max-w-xs text-center" style={{ boxShadow: '0 20px 60px rgba(124,58,237,0.3)' }}>
           <div className="text-3xl mb-3">🎉</div>
           <p className="text-white font-bold text-sm mb-1" style={{ fontFamily: 'var(--font-display)' }}>Setup complete!</p>
@@ -79,7 +79,7 @@ export default function OnboardingChecklist() {
   }
 
   return (
-    <div className="fixed bottom-24 right-6 z-40 onboarding-card w-72">
+    <div className="fixed bottom-6 left-[272px] z-40 onboarding-card w-72">
       <div className="gradient-border-card overflow-hidden" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,58,237,0.2)' }}>
         {/* Header */}
         <div className="flex items-center gap-3 px-4 py-3.5 border-b border-white/5">
