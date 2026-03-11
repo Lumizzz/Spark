@@ -656,8 +656,8 @@ export async function getRecentActivity(): Promise<{
   ]);
 
   const items = [
-    ...(pages.data || []).map((p: Record<string,unknown>) => ({ type: 'page', title: p.title, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at })),
-    ...(posts.data || []).map((p: Record<string,unknown>) => ({ type: 'post', title: p.title, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at })),
+    ...(pages.data || []).map((p: Record<string,unknown>) => ({ type: 'page', title: p.title as string, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at as string })),
+    ...(posts.data || []).map((p: Record<string,unknown>) => ({ type: 'post', title: p.title as string, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at as string })),
   ];
 
   return items.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 8);
