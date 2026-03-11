@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { getSiteSettings } from '@/lib/actions';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
   Zap, Shield, Globe, BarChart3, Users, Code2, Palette, Lock,
