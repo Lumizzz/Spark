@@ -26,6 +26,11 @@ function hashColor(email: string) {
   return AVATAR_GRADIENTS[(email || 'a').split('').reduce((a, c) => a + c.charCodeAt(0), 0) % AVATAR_GRADIENTS.length];
 }
 
+function getRoleName(user: Profile): string {
+  return ((user.roles as unknown) as { name?: string } | null)?.name ?? 'editor';
+}
+
+
 const PERMISSIONS = [
   ['Create & edit pages', true, true],
   ['Publish / unpublish pages', true, true],
@@ -57,15 +62,15 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
   const [showMatrix, setShowMatrix] = useState(false);
 
   const currentUser = users.find((u: Profile) => u.id === currentUserId);
-  const isAdmin = (currentUser?.roles as { name: string } | undefined)?.name === 'admin';
+  const isAdmin = getRoleName(currentUser!) === 'admin';
 
   const filtered = users.filter((u: Profile) =>
     (u.full_name || '').toLowerCase().includes(search.toLowerCase()) ||
     (u.email || '').toLowerCase().includes(search.toLowerCase())
   );
 
-  const admins = users.filter((u: Profile) => (u.roles as { name: string } | undefined)?.name === 'admin').length;
-  const editors = users.filter((u: Profile) => (u.roles as { name: string } | undefined)?.name !== 'admin').length;
+  const admins = users.filter((u: Profile) => getRoleName(u) === 'admin').length;
+  const editors = users.filter((u: Profile) => getRoleName(u) !== 'admin').length;
 
   const handleRoleChange = async (userId: string, role: 'admin' | 'editor') => {
     setSaving(true);
@@ -195,7 +200,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
         ) : (
           <div className="divide-y divide-white/5">
             {filtered.map((user: Profile) => {
-              const roleName = (user.roles as { name: string } | undefined)?.name || 'editor';
+              const roleName = getRoleName(user);
               const rc = ROLE_CONFIG[roleName] || ROLE_CONFIG.editor;
               const isMe = user.id === currentUserId;
               const gradient = hashColor(user.email || '');

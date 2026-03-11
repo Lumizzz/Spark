@@ -30,7 +30,7 @@ export default async function ChangelogPage() {
   const posts = allPosts
     .filter(p => p.status === 'published')
     .filter(p => {
-      const cats = (p.categories as { slug: string }[] | undefined) || [];
+      const cats = ((p.categories as unknown) as { slug: string }[] | undefined) || [];
       return cats.some(c => c.slug === 'changelog') || cats.length === 0;
     })
     .slice(0, 20);

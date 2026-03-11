@@ -50,7 +50,7 @@ export default function CommandPalette({ onClose }: CommandPaletteProps) {
 
   const go = (item: typeof flatItems[number]) => {
     onClose();
-    if ((item as {external?: boolean}).external) {
+    if ((item as unknown as {external?: boolean}).external) {
       window.open(item.href, '_blank');
     } else {
       router.push(item.href);

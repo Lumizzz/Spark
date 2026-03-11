@@ -57,7 +57,7 @@ export default function DashboardSidebar({ user }: { user: Profile }) {
   const supabase = createClient();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const roleName = (user.roles as { name: string } | undefined)?.name || 'editor';
+  const roleName = ((user.roles as unknown) as { name?: string } | null)?.name ?? 'editor';
   const initials = ((user.full_name || user.email || 'U').slice(0, 2)).toUpperCase();
   const avatarGradient = getAvatarGradient(user.email || '');
 
