@@ -284,7 +284,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
               );
             })}
           </div>
-        </div>
+        )}
       </div>
 
       {/* Permission Matrix toggle */}
