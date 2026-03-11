@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 import { getPricingPlans, getBlogPosts } from '@/lib/actions';
 import BlockRenderer from '@/components/blocks/BlockRenderer';
 import type { PageSection, Page } from '@/types';
@@ -20,8 +20,9 @@ async function getPage(slug: string): Promise<Page | null> {
   return data;
 }
 
+// Uses admin client — no cookies() call, safe at build time
 export async function generateStaticParams() {
-  const supabase = createClient();
+  const supabase = createAdminClient();
   const { data } = await supabase.from('pages').select('slug').eq('status', 'published');
   return (data || []).map((p) => ({ slug: p.slug }));
 }
@@ -44,7 +45,6 @@ export default async function DynamicPage({ params }: Props) {
     (a: PageSection, b: PageSection) => a.order - b.order
   );
 
-  // Pre-fetch data that some blocks need
   const needsPricing = sections.some((s) => s.type === 'pricing_table');
   const needsBlog = sections.some((s) => s.type === 'blog_list');
 

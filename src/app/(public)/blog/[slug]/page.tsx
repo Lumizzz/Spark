@@ -2,15 +2,21 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getBlogPostBySlug, getBlogPosts } from '@/lib/actions';
+import { getBlogPostBySlug } from '@/lib/actions';
+import { createAdminClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils';
 import { ArrowLeft, Clock } from 'lucide-react';
 
 type Props = { params: { slug: string } };
 
+// Uses admin client — no cookies() call, safe at build time
 export async function generateStaticParams() {
-  const posts = await getBlogPosts({ status: 'published' });
-  return posts.map((p) => ({ slug: p.slug }));
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('blog_posts')
+    .select('slug')
+    .eq('status', 'published');
+  return (data || []).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -19,7 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.meta_title || post.title,
     description: post.meta_description || post.excerpt || '',
-    openGraph: { images: post.og_image ? [post.og_image] : (post.featured_image ? [post.featured_image] : []) },
+    openGraph: {
+      images: post.og_image ? [post.og_image] : post.featured_image ? [post.featured_image] : [],
+    },
   };
 }
 
@@ -65,18 +73,12 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       )}
 
-      <div
-        className="prose-dark"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      <div className="prose-dark" dangerouslySetInnerHTML={{ __html: post.content }} />
 
       {post.tags && post.tags.length > 0 && (
         <div className="mt-12 pt-8 border-t border-white/5 flex flex-wrap gap-2">
           {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-3 py-1 glass-card rounded-full text-xs text-slate-400"
-            >
+            <span key={tag} className="px-3 py-1 glass-card rounded-full text-xs text-slate-400">
               #{tag}
             </span>
           ))}
