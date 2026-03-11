@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -48,8 +49,8 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
   });
 
   const setField = <K extends keyof FormState>(key: K, val: FormState[K]) => {
-    setForm((f) => ({ ...f, [key]: val }));
-    if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
+    setForm((f: typeof form) => ({ ...f, [key]: val }));
+    if (errors[key]) setErrors((e: Record<string, string | undefined>) => ({ ...e, [key]: undefined }));
   };
 
   const handleContentChange = (val: string) => {
@@ -57,13 +58,13 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
     const text = val.replace(/<[^>]*>/g, ' ');
     const words = text.trim().split(/\s+/).filter(Boolean).length;
     const minutes = Math.max(1, Math.ceil(words / 200));
-    setForm((f) => ({ ...f, content: val, read_time: minutes }));
-    if (errors.content) setErrors((e) => ({ ...e, content: undefined }));
+    setForm((f: typeof form) => ({ ...f, content: val, read_time: minutes }));
+    if (errors.content) setErrors((e: Record<string, string | undefined>) => ({ ...e, content: undefined }));
   };
 
   const handleTitleChange = (val: string) => {
-    setForm((f) => ({ ...f, title: val, slug: slugEdited ? f.slug : slugify(val) }));
-    if (errors.title) setErrors((e) => ({ ...e, title: undefined }));
+    setForm((f: typeof form) => ({ ...f, title: val, slug: slugEdited ? f.slug : slugify(val) }));
+    if (errors.title) setErrors((e: Record<string, string | undefined>) => ({ ...e, title: undefined }));
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -193,7 +194,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               </label>
               <input
                 value={form.title}
-                onChange={(e) => handleTitleChange(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => handleTitleChange(e.target.value)}
                 placeholder="Post title..."
                 className={`${inputClass('title')} text-lg font-semibold`}
               />
@@ -206,7 +207,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
                 <span className="px-3 py-3 rounded-l-xl bg-white/3 border border-r-0 border-white/10 text-slate-500 text-sm">/blog/</span>
                 <input
                   value={form.slug}
-                  onChange={(e) => { setSlugEdited(true); setField('slug', slugify(e.target.value)); }}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => { setSlugEdited(true); setField('slug', slugify(e.target.value)); }}
                   className={`flex-1 px-4 py-3 rounded-r-xl bg-white/5 border text-white text-sm focus:outline-none transition-colors ${
                     errors.slug ? 'border-red-500/60' : 'border-white/10 focus:border-purple-500/50'
                   }`}
@@ -219,7 +220,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               <label className="block text-xs text-slate-400 mb-1.5 font-medium">Excerpt</label>
               <textarea
                 value={form.excerpt}
-                onChange={(e) => setField('excerpt', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => setField('excerpt', e.target.value)}
                 rows={2}
                 placeholder="Brief summary shown in post listings..."
                 className={`${inputClass('excerpt')} resize-none`}
@@ -238,7 +239,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               </label>
               <textarea
                 value={form.content}
-                onChange={(e) => handleContentChange(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => handleContentChange(e.target.value)}
                 rows={18}
                 placeholder="<h2>Introduction</h2><p>Your content here...</p>"
                 className={`${inputClass('content')} resize-none font-mono text-xs`}
@@ -262,7 +263,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               </div>
               <input
                 value={form.meta_title}
-                onChange={(e) => setField('meta_title', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => setField('meta_title', e.target.value)}
                 placeholder="SEO title (defaults to post title)"
                 className={inputClass('meta_title')}
               />
@@ -277,7 +278,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               </div>
               <textarea
                 value={form.meta_description}
-                onChange={(e) => setField('meta_description', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => setField('meta_description', e.target.value)}
                 rows={2}
                 placeholder="SEO description..."
                 className={`${inputClass('meta_description')} resize-none`}
@@ -305,7 +306,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               <label className="block text-xs text-slate-400 mb-1.5">Status</label>
               <select
                 value={form.status}
-                onChange={(e) => setField('status', e.target.value as 'draft' | 'published')}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => setField('status', e.target.value as 'draft' | 'published')}
                 className="w-full px-3 py-2 rounded-lg bg-[#0a0a1a] border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50"
               >
                 <option value="draft">Draft</option>
@@ -316,7 +317,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               <label className="block text-xs text-slate-400 mb-1.5">Category</label>
               <select
                 value={form.category_id}
-                onChange={(e) => setField('category_id', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => setField('category_id', e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-[#0a0a1a] border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50"
               >
                 <option value="">No category</option>
@@ -327,7 +328,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               <label className="block text-xs text-slate-400 mb-1.5">Tags (comma-separated)</label>
               <input
                 value={form.tags}
-                onChange={(e) => setField('tags', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => setField('tags', e.target.value)}
                 placeholder="react, nextjs, tutorial"
                 className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50"
               />
@@ -337,7 +338,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
               <input
                 type="number"
                 value={form.read_time}
-                onChange={(e) => setField('read_time', parseInt(e.target.value) || 5)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => setField('read_time', parseInt(e.target.value) || 5)}
                 min={1}
                 max={120}
                 className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50"
@@ -361,7 +362,7 @@ export default function BlogEditorClient({ post, categories }: BlogEditorProps) 
             )}
             <input
               value={form.featured_image}
-              onChange={(e) => setField('featured_image', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => setField('featured_image', e.target.value)}
               placeholder="https://..."
               className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-purple-500/50"
             />

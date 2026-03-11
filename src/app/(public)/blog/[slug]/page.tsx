@@ -13,7 +13,7 @@ type Props = { params: { slug: string } };
 export async function generateStaticParams() {
   const supabase = createAdminClient();
   const { data } = await supabase.from('blog_posts').select('slug').eq('status', 'published');
-  return (data || []).map((p) => ({ slug: p.slug }));
+  return (data || [] as {slug: string}[]).map((p: {slug: string}) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

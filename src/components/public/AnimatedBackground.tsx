@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 
@@ -41,7 +42,7 @@ function useNebulaCanvas(canvasRef: React.RefObject<HTMLCanvasElement>, active: 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const { x: mx, y: my } = mouseRef.current;
 
-      orbsRef.current.forEach((orb, i) => {
+      orbsRef.current.forEach((orb: Orb, i: number) => {
         // Drift toward mouse slightly
         const dxm = mx - orb.x;
         const dym = my - orb.y;
@@ -268,10 +269,10 @@ export default function AnimatedBackground() {
               ))}
             </div>
           )}
-          <button onClick={() => setShowPicker(p => !p)}
+          <button onClick={() => setShowPicker((p: boolean) => !p)}
             className="w-9 h-9 rounded-full backdrop-blur-xl border border-white/10 bg-black/30 text-slate-500 hover:text-white hover:border-violet-500/40 transition-all flex items-center justify-center text-sm"
             title="Change background style">
-            {MODE_LABELS.find(m => m.mode === mode)?.icon || '◉'}
+            {MODE_LABELS.find((m: typeof MODE_LABELS[0]) => m.mode === mode)?.icon || '◉'}
           </button>
         </div>
       </div>

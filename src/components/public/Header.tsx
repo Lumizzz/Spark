@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -14,7 +15,7 @@ function useDarkMode() {
     if (saved === 'light') { setDark(false); document.documentElement.classList.add('light-mode'); }
   }, []);
   const toggle = () => {
-    setDark(prev => {
+    setDark((prev: boolean) => {
       const next = !prev;
       if (next) {
         document.documentElement.classList.remove('light-mode');

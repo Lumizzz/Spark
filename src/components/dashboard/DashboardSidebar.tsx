@@ -7,8 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import {
   LayoutDashboard, FileText, BookOpen, DollarSign, Image as ImageIcon,
   Settings, Users, Search, LogOut, Sparkles, ExternalLink, Menu, X,
-  Tag, ChevronRight, Bell,
-} from 'lucide-react';
+  Tag, ChevronRight, Bell, Hash } from 'lucide-react';
 import type { Profile } from '@/types';
 import toast from 'react-hot-toast';
 

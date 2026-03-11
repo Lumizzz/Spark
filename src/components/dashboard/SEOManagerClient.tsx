@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import { updatePageMeta } from '@/lib/actions';
@@ -111,7 +112,7 @@ export default function SEOManagerClient({ pages }: SEOManagerClientProps) {
                   <span className="text-slate-500 text-sm">/</span>
                   <input
                     value={form.slug}
-                    onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setForm((f: typeof form) => ({ ...f, slug: e.target.value }))}
                     className={inputClass}
                   />
                 </div>
@@ -126,7 +127,7 @@ export default function SEOManagerClient({ pages }: SEOManagerClientProps) {
                 </div>
                 <input
                   value={form.meta_title}
-                  onChange={(e) => setForm((f) => ({ ...f, meta_title: e.target.value }))}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setForm((f: typeof form) => ({ ...f, meta_title: e.target.value }))}
                   placeholder={selected.title}
                   className={inputClass}
                 />
@@ -141,7 +142,7 @@ export default function SEOManagerClient({ pages }: SEOManagerClientProps) {
                 </div>
                 <textarea
                   value={form.meta_description}
-                  onChange={(e) => setForm((f) => ({ ...f, meta_description: e.target.value }))}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setForm((f: typeof form) => ({ ...f, meta_description: e.target.value }))}
                   placeholder="A brief description of this page for search engines..."
                   rows={3}
                   className={`${inputClass} resize-none`}
@@ -152,7 +153,7 @@ export default function SEOManagerClient({ pages }: SEOManagerClientProps) {
                 <label className="block text-xs text-slate-400 mb-1.5 font-medium">OG Image URL</label>
                 <input
                   value={form.og_image}
-                  onChange={(e) => setForm((f) => ({ ...f, og_image: e.target.value }))}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setForm((f: typeof form) => ({ ...f, og_image: e.target.value }))}
                   placeholder="https://yourdomain.com/og-image.jpg"
                   className={inputClass}
                 />

@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -55,16 +56,16 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
   const [inviting, setInviting] = useState(false);
   const [showMatrix, setShowMatrix] = useState(false);
 
-  const currentUser = users.find(u => u.id === currentUserId);
+  const currentUser = users.find((u: Profile) => u.id === currentUserId);
   const isAdmin = (currentUser?.roles as { name: string } | undefined)?.name === 'admin';
 
-  const filtered = users.filter(u =>
+  const filtered = users.filter((u: Profile) =>
     (u.full_name || '').toLowerCase().includes(search.toLowerCase()) ||
     (u.email || '').toLowerCase().includes(search.toLowerCase())
   );
 
-  const admins = users.filter(u => (u.roles as { name: string } | undefined)?.name === 'admin').length;
-  const editors = users.filter(u => (u.roles as { name: string } | undefined)?.name !== 'admin').length;
+  const admins = users.filter((u: Profile) => (u.roles as { name: string } | undefined)?.name === 'admin').length;
+  const editors = users.filter((u: Profile) => (u.roles as { name: string } | undefined)?.name !== 'admin').length;
 
   const handleRoleChange = async (userId: string, role: 'admin' | 'editor') => {
     setSaving(true);
@@ -145,11 +146,11 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
             <Mail className="w-4 h-4 text-violet-400" /> Send an invite
           </h3>
           <form onSubmit={handleInvite} className="flex gap-3 flex-wrap">
-            <input type="email" value={inviteEmail} onChange={(e) => setInviteEmail(e.target.value)} required
+            <input type="email" value={inviteEmail} onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setInviteEmail(e.target.value)} required
               placeholder="teammate@company.com"
               className="flex-1 min-w-48 px-4 py-2.5 rounded-xl admin-search-input text-sm" />
             <div className="relative">
-              <select value={inviteRole} onChange={(e) => setInviteRole(e.target.value as 'admin' | 'editor')}
+              <select value={inviteRole} onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setInviteRole(e.target.value as 'admin' | 'editor')}
                 className="appearance-none px-4 py-2.5 pr-8 rounded-xl admin-search-input text-sm cursor-pointer">
                 <option value="editor" style={{ background: '#06060f' }}>Editor role</option>
                 <option value="admin" style={{ background: '#06060f' }}>Admin role</option>
@@ -174,7 +175,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
         {/* Search bar */}
         <div className="flex items-center gap-3 px-5 py-3 border-b border-white/5">
           <Search className="w-4 h-4 text-slate-600 shrink-0" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)}
+          <input value={search} onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setSearch(e.target.value)}
             placeholder="Search members..."
             className="flex-1 bg-transparent text-white text-sm placeholder-slate-700 focus:outline-none" />
           <span className="text-xs text-slate-700">{filtered.length} of {users.length}</span>
@@ -193,7 +194,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
           </div>
         ) : (
           <div className="divide-y divide-white/5">
-            {filtered.map((user) => {
+            {filtered.map((user: import('@/types').Profile) => {
               const roleName = (user.roles as { name: string } | undefined)?.name || 'editor';
               const rc = ROLE_CONFIG[roleName] || ROLE_CONFIG.editor;
               const isMe = user.id === currentUserId;
@@ -210,7 +211,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
                     <div className="min-w-0">
                       {editingNameId === user.id ? (
                         <div className="flex items-center gap-1.5">
-                          <input value={editName} onChange={(e) => setEditName(e.target.value)}
+                          <input value={editName} onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setEditName(e.target.value)}
                             className="px-2.5 py-1 rounded-lg admin-search-input text-xs text-white w-36"
                             placeholder="Full name" autoFocus />
                           <button onClick={() => handleNameSave(user.id)} disabled={saving}
@@ -237,7 +238,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
                     {isAdmin && !isMe ? (
                       <div className="relative w-fit">
                         <select defaultValue={roleName}
-                          onChange={(e) => handleRoleChange(user.id, e.target.value as 'admin' | 'editor')}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => handleRoleChange(user.id, e.target.value as 'admin' | 'editor')}
                           disabled={saving}
                           className={`appearance-none pl-6 pr-6 py-1 rounded-lg text-xs font-semibold cursor-pointer focus:outline-none border ${rc.chipClass}`}
                           style={{ background: 'transparent' }}>

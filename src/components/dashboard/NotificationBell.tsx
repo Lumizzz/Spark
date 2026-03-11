@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState, useEffect, useRef } from 'react';
 import { Bell, Mail, FileText, Users, BookOpen, X, Check } from 'lucide-react';
@@ -35,7 +36,7 @@ export default function NotificationBell() {
   const [notifs, setNotifs] = useState<Notif[]>(DEMO);
   const [ringing, setRinging] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
-  const unread = notifs.filter(n => !n.read).length;
+  const unread = notifs.filter((n: Notif) => !n.read).length;
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
@@ -45,13 +46,13 @@ export default function NotificationBell() {
     return () => document.removeEventListener('mousedown', close);
   }, []);
 
-  const markAll = () => setNotifs(n => n.map(x => ({ ...x, read: true })));
-  const dismiss = (id: string) => setNotifs(n => n.filter(x => x.id !== id));
+  const markAll = () => setNotifs((n: Notif[]) => n.map((x: Notif) => ({ ...x, read: true })));
+  const dismiss = (id: string) => setNotifs((n: Notif[]) => n.filter((x: Notif) => x.id !== id));
 
   const ringBell = () => {
     setRinging(true);
     setTimeout(() => setRinging(false), 600);
-    setOpen(p => !p);
+    setOpen((p: boolean) => !p);
   };
 
   const timeAgo = (iso: string) => {
@@ -95,8 +96,8 @@ export default function NotificationBell() {
                   <Bell className="w-8 h-8 text-slate-800 mx-auto mb-2" />
                   <p className="text-slate-600 text-xs">No notifications yet</p>
                 </div>
-              ) : notifs.map((n) => {
-                const cfg = TYPE_CONFIG[n.type];
+              ) : notifs.map((n: Notif) => {
+                const cfg = TYPE_CONFIG[n.type as NotifType];
                 const Icon = cfg.icon;
                 return (
                   <div key={n.id} className={`flex items-start gap-3 px-4 py-3 border-b border-white/5 last:border-0 transition-colors hover:bg-white/2 ${!n.read ? 'bg-violet-500/3' : ''}`}>

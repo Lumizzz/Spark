@@ -95,7 +95,7 @@ export function getZodErrors<T extends Record<string, unknown>>(
   error: z.ZodError
 ): Partial<Record<keyof T, string>> {
   const result: Partial<Record<keyof T, string>> = {};
-  error.issues.forEach((issue) => {
+  error.issues.forEach((issue: {path: (string|number)[]; message: string}) => {
     const field = issue.path[0] as keyof T;
     if (!result[field]) result[field] = issue.message;
   });

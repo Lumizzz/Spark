@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState, useEffect, useCallback } from 'react';
 import { X, Search, Upload, Check, Image as ImageIcon, Loader2 } from 'lucide-react';
@@ -69,7 +70,7 @@ export default function MediaPickerModal({
   };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+    const files = Array.from(e.target.files || []) as File[];
     if (!files.length) return;
     setUploading(true);
     try {
@@ -93,7 +94,7 @@ export default function MediaPickerModal({
     }
   };
 
-  const filteredMedia = media.filter((item) =>
+  const filteredMedia = media.filter((item: import("@/types").MediaItem) =>
     search === '' ||
     item.original_name.toLowerCase().includes(search.toLowerCase()) ||
     item.alt_text?.toLowerCase().includes(search.toLowerCase())
@@ -134,7 +135,7 @@ export default function MediaPickerModal({
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
               placeholder="Search images..."
               className="w-full pl-9 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-purple-500/50"
             />
@@ -176,7 +177,7 @@ export default function MediaPickerModal({
             </div>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-              {filteredMedia.map((item) => {
+              {filteredMedia.map((item: import("@/types").MediaItem) => {
                 const isSelected = selected === item.url;
                 return (
                   <button

@@ -38,8 +38,8 @@ export default function ContactPage() {
   const [sent, setSent] = useState(false);
 
   const update = (field: keyof ContactForm, val: string) => {
-    setForm((f) => ({ ...f, [field]: val }));
-    if (errors[field]) setErrors((e) => ({ ...e, [field]: undefined }));
+    setForm((f: Record<string,string>) => ({ ...f, [field]: val }));
+    if (errors[field]) setErrors((e: Record<string,string|undefined>) => ({ ...e, [field]: undefined }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,7 +47,7 @@ export default function ContactPage() {
     const result = contactSchema.safeParse(form);
     if (!result.success) {
       const fieldErrors: FieldErrors = {};
-      result.error.issues.forEach((issue) => {
+      result.error.issues.forEach((issue: {path: (string|number)[]; message: string}) => {
         const field = issue.path[0] as keyof ContactForm;
         fieldErrors[field] = issue.message;
       });
@@ -144,7 +144,7 @@ export default function ContactPage() {
                       <input
                         type="text"
                         value={form.name}
-                        onChange={(e) => update('name', e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => update('name', e.target.value)}
                         placeholder="Your name"
                         className={inputClass('name')}
                       />
@@ -155,7 +155,7 @@ export default function ContactPage() {
                       <input
                         type="email"
                         value={form.email}
-                        onChange={(e) => update('email', e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => update('email', e.target.value)}
                         placeholder="you@company.com"
                         className={inputClass('email')}
                       />
@@ -167,7 +167,7 @@ export default function ContactPage() {
                     <input
                       type="text"
                       value={form.company}
-                      onChange={(e) => update('company', e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => update('company', e.target.value)}
                       placeholder="Your company (optional)"
                       className={inputClass('company')}
                     />
@@ -177,7 +177,7 @@ export default function ContactPage() {
                     <input
                       type="text"
                       value={form.subject}
-                      onChange={(e) => update('subject', e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => update('subject', e.target.value)}
                       placeholder="How can we help?"
                       className={inputClass('subject')}
                     />
@@ -187,7 +187,7 @@ export default function ContactPage() {
                     <label className="block text-xs text-slate-400 mb-1.5 font-medium">Message *</label>
                     <textarea
                       value={form.message}
-                      onChange={(e) => update('message', e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => update('message', e.target.value)}
                       placeholder="Tell us more about what you need..."
                       rows={5}
                       className={inputClass('message')}

@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
@@ -13,7 +14,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
     const handleKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        setPaletteOpen(prev => !prev);
+        setPaletteOpen((prev: boolean) => !prev);
       }
     };
     window.addEventListener('keydown', handleKey);
@@ -47,7 +48,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 
       {paletteOpen && (
         <div className="fixed inset-0 z-[100] command-overlay" onClick={() => setPaletteOpen(false)}>
-          <div onClick={e => e.stopPropagation()}>
+          <div onClick={(e: React.MouseEvent) => e.stopPropagation()}>
             <CommandPalette onClose={() => setPaletteOpen(false)} />
           </div>
         </div>

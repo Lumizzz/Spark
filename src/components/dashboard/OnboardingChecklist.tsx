@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState, useEffect } from 'react';
 import { CheckCircle2, Circle, X, Sparkles, ChevronDown } from 'lucide-react';
@@ -30,10 +31,10 @@ export default function OnboardingChecklist() {
   }, []);
 
   const toggle = (id: string) => {
-    setCompleted(prev => {
+    setCompleted((prev: Set<string>) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id); else next.add(id);
-      localStorage.setItem('onboarding-completed', JSON.stringify([...next]));
+      localStorage.setItem('onboarding-completed', JSON.stringify(Array.from(next)));
       return next;
     });
   };
@@ -44,7 +45,7 @@ export default function OnboardingChecklist() {
   };
 
   const toggleMin = () => {
-    setMinimized(p => {
+    setMinimized((p: boolean) => {
       localStorage.setItem('onboarding-minimized', p ? '' : '1');
       return !p;
     });

@@ -467,7 +467,7 @@ export async function getPricingPlans(): Promise<PricingPlan[]> {
 
   if (!data) return [];
 
-  return data.map((plan) => ({
+  return (data as import('@/types').PricingPlan[]).map((plan: import('@/types').PricingPlan) => ({
     ...plan,
     pricing_features: plan.pricing_features?.sort(
       (a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order
@@ -656,8 +656,8 @@ export async function getRecentActivity(): Promise<{
   ]);
 
   const items = [
-    ...(pages.data || []).map((p) => ({ type: 'page', title: p.title, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at })),
-    ...(posts.data || []).map((p) => ({ type: 'post', title: p.title, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at })),
+    ...(pages.data || []).map((p: Record<string,unknown>) => ({ type: 'page', title: p.title, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at })),
+    ...(posts.data || []).map((p: Record<string,unknown>) => ({ type: 'post', title: p.title, action: p.status === 'published' ? 'published' : 'updated', time: p.updated_at })),
   ];
 
   return items.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 8);

@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
@@ -39,9 +40,9 @@ export default function CommandPalette({ onClose }: CommandPaletteProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const flatItems = COMMANDS.flatMap(g => g.items);
+  const flatItems = COMMANDS.flatMap((g: typeof COMMANDS[0]) => g.items);
   const filtered = query.trim()
-    ? flatItems.filter(i => i.label.toLowerCase().includes(query.toLowerCase()))
+    ? flatItems.filter((i: typeof flatItems[0]) => i.label.toLowerCase().includes(query.toLowerCase()))
     : flatItems;
 
   useEffect(() => { inputRef.current?.focus(); }, []);
@@ -49,7 +50,7 @@ export default function CommandPalette({ onClose }: CommandPaletteProps) {
 
   const go = (item: typeof flatItems[number]) => {
     onClose();
-    if (item.external) {
+    if ((item as {external?: boolean}).external) {
       window.open(item.href, '_blank');
     } else {
       router.push(item.href);
@@ -57,10 +58,10 @@ export default function CommandPalette({ onClose }: CommandPaletteProps) {
   };
 
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
+    const handleKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') { onClose(); return; }
-      if (e.key === 'ArrowDown') { e.preventDefault(); setSelected(s => Math.min(s + 1, filtered.length - 1)); }
-      if (e.key === 'ArrowUp') { e.preventDefault(); setSelected(s => Math.max(s - 1, 0)); }
+      if (e.key === 'ArrowDown') { e.preventDefault(); setSelected((s: number) => Math.min(s + 1, filtered.length - 1)); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); setSelected((s: number) => Math.max(s - 1, 0)); }
       if (e.key === 'Enter' && filtered[selected]) { go(filtered[selected]); }
     };
     window.addEventListener('keydown', handleKey);
@@ -76,7 +77,7 @@ export default function CommandPalette({ onClose }: CommandPaletteProps) {
 
   return (
     <div className="fixed inset-0 z-[200] flex items-start justify-center pt-[15vh] px-4" onClick={onClose}>
-      <div className="w-full max-w-lg" onClick={e => e.stopPropagation()}
+      <div className="w-full max-w-lg" onClick={(e: React.MouseEvent) => e.stopPropagation()}
         style={{ animation: 'command-in 0.15s cubic-bezier(0.16,1,0.3,1) forwards' }}>
         <div className="gradient-border-card overflow-hidden"
           style={{ boxShadow: '0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(124,58,237,0.3), 0 0 60px rgba(124,58,237,0.1)' }}>
@@ -86,7 +87,7 @@ export default function CommandPalette({ onClose }: CommandPaletteProps) {
             <input
               ref={inputRef}
               value={query}
-              onChange={e => setQuery(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
               placeholder="Search commands, pages, settings..."
               className="flex-1 bg-transparent text-white placeholder-slate-600 text-sm focus:outline-none"
             />
@@ -107,7 +108,7 @@ export default function CommandPalette({ onClose }: CommandPaletteProps) {
                     const Icon = item.icon;
                     const isSelected = selected === (query.trim() ? idx : flatItems.findIndex(f => f.id === item.id));
                     const actualSelected = query.trim()
-                      ? filtered.indexOf(filtered.find(f => f.id === item.id)!) === selected
+                      ? selected === flatItems.indexOf(flatItems.find((f) => f.id === item.id)!)
                       : selected === flatItems.findIndex(f => f.id === item.id);
 
                     return (
@@ -121,7 +122,7 @@ export default function CommandPalette({ onClose }: CommandPaletteProps) {
                         <span className="flex-1">{item.label}</span>
                         {'shortcut' in item && item.shortcut && (
                           <div className="flex gap-1">
-                            {String(item.shortcut).split(' ').map((k: string) => (
+                            {String(item.shortcut).split(" ").map((k: string) => (
                               <kbd key={k} className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-slate-700 font-mono border border-white/8">{k}</kbd>
                             ))}
                           </div>

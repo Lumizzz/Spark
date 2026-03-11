@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState, useCallback } from 'react';
 import {
@@ -39,6 +40,7 @@ function SortableSection({
   onEdit,
   onDelete,
 }: {
+  key?: string;
   section: PageSection;
   onEdit: (section: PageSection) => void;
   onDelete: (id: string) => void;
@@ -176,10 +178,10 @@ export default function PageBuilderClient({ page }: PageBuilderClientProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      setSections((items) => {
-        const oldIndex = items.findIndex((i) => i.id === active.id);
-        const newIndex = items.findIndex((i) => i.id === over.id);
-        return arrayMove(items, oldIndex, newIndex).map((s, idx) => ({ ...s, order: idx }));
+      setSections((items: import("@/types").PageSection[]) => {
+        const oldIndex = items.findIndex((i: import("@/types").PageSection) => i.id === active.id);
+        const newIndex = items.findIndex((i: import("@/types").PageSection) => i.id === over.id);
+        return arrayMove(items, oldIndex as number, newIndex as number).map((s: import("@/types").PageSection, idx: number) => ({ ...s, order: idx }));
       });
     }
   };
@@ -191,17 +193,17 @@ export default function PageBuilderClient({ page }: PageBuilderClientProps) {
       order: sections.length,
       props: DEFAULT_BLOCK_PROPS[type] || {},
     };
-    setSections((prev) => [...prev, newSection]);
+    setSections((prev: import("@/types").PageSection[]) => [...prev, newSection]);
     setEditingSection(newSection);
   };
 
   const handleDeleteSection = (id: string) => {
-    setSections((prev) => prev.filter((s) => s.id !== id));
+    setSections((prev: import("@/types").PageSection[]) => prev.filter((s) => s.id !== id));
   };
 
   const handleUpdateProps = useCallback((id: string, props: PageSection['props']) => {
-    setSections((prev) => prev.map((s) => s.id === id ? { ...s, props } : s));
-    setEditingSection((prev) => prev && prev.id === id ? { ...prev, props } : prev);
+    setSections((prev: import("@/types").PageSection[]) => prev.map((s: import("@/types").PageSection) => s.id === id ? { ...s, props } : s));
+    setEditingSection((prev: import("@/types").PageSection | null) => prev && prev.id === id ? { ...prev, props } : prev);
   }, []);
 
   const handleSave = async () => {
@@ -247,7 +249,7 @@ export default function PageBuilderClient({ page }: PageBuilderClientProps) {
                 <label className="text-xs text-slate-500 mb-1 block">Status</label>
                 <select
                   value={status}
-                  onChange={(e) => setStatus(e.target.value as 'draft' | 'published' | 'archived')}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value as 'draft' | 'published' | 'archived')}
                   className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-purple-500/50"
                 >
                   <option value="draft">Draft</option>
@@ -259,7 +261,7 @@ export default function PageBuilderClient({ page }: PageBuilderClientProps) {
                 <label className="text-xs text-slate-500 mb-1 block">Meta Title</label>
                 <input
                   value={metaTitle}
-                  onChange={(e) => setMetaTitle(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMetaTitle(e.target.value)}
                   placeholder="SEO title..."
                   className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs placeholder-slate-600 focus:outline-none focus:border-purple-500/50"
                 />
@@ -268,7 +270,7 @@ export default function PageBuilderClient({ page }: PageBuilderClientProps) {
                 <label className="text-xs text-slate-500 mb-1 block">Meta Description</label>
                 <textarea
                   value={metaDescription}
-                  onChange={(e) => setMetaDescription(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMetaDescription(e.target.value)}
                   placeholder="SEO description..."
                   rows={2}
                   className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs placeholder-slate-600 focus:outline-none focus:border-purple-500/50 resize-none"
@@ -291,13 +293,13 @@ export default function PageBuilderClient({ page }: PageBuilderClientProps) {
             </div>
           ) : (
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-              <SortableContext items={sections.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+              <SortableContext items={sections.map((s: import("@/types").PageSection) => s.id)} strategy={verticalListSortingStrategy}>
                 <div className="space-y-2">
-                  {sections.map((section) => (
+                  {sections.map((section: import("@/types").PageSection) => (
                     <SortableSection
                       key={section.id}
                       section={section}
-                      onEdit={setEditingSection}
+                      onEdit={(s: import('@/types').PageSection) => setEditingSection(s)}
                       onDelete={handleDeleteSection}
                     />
                   ))}

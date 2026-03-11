@@ -43,7 +43,7 @@ function Textarea({ value, onChange, placeholder, rows = 3 }: {
   return (
     <textarea
       value={value ?? ''}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
       placeholder={placeholder}
       rows={rows}
       className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-purple-500/50 transition-colors resize-none"

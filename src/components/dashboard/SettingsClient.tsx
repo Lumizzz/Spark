@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import { updateSiteSettings } from '@/lib/actions';
@@ -65,16 +66,16 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
     }
   };
 
-  const addNavLink = () => setNavLinks((l) => [...l, { label: 'New Link', href: '/' }]);
-  const removeNavLink = (i: number) => setNavLinks((l) => l.filter((_, idx) => idx !== i));
+  const addNavLink = () => setNavLinks((l: import('@/types').NavLink[]) => [...l, { label: 'New Link', href: '/' }]);
+  const removeNavLink = (i: number) => setNavLinks((l: import('@/types').NavLink[]) => l.filter((_: NavLink, idx: number) => idx !== i));
   const updateNavLink = (i: number, key: 'label' | 'href', val: string) => {
-    setNavLinks((l) => l.map((item, idx) => (idx === i ? { ...item, [key]: val } : item)));
+    setNavLinks((l: import('@/types').NavLink[]) => l.map((item: NavLink, idx: number) => (idx === i ? { ...item, [key]: val } : item)));
   };
 
-  const addFooterLink = () => setFooterLinks((l) => [...l, { label: 'New Link', href: '/' }]);
-  const removeFooterLink = (i: number) => setFooterLinks((l) => l.filter((_, idx) => idx !== i));
+  const addFooterLink = () => setFooterLinks((l: import('@/types').NavLink[]) => [...l, { label: 'New Link', href: '/' }]);
+  const removeFooterLink = (i: number) => setFooterLinks((l: import('@/types').NavLink[]) => l.filter((_: NavLink, idx: number) => idx !== i));
   const updateFooterLink = (i: number, key: 'label' | 'href', val: string) => {
-    setFooterLinks((l) => l.map((item, idx) => (idx === i ? { ...item, [key]: val } : item)));
+    setFooterLinks((l: import('@/types').NavLink[]) => l.map((item: NavLink, idx: number) => (idx === i ? { ...item, [key]: val } : item)));
   };
 
   const inputClass =
@@ -132,7 +133,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
               <label className="block text-xs text-slate-400 mb-1.5 font-medium">Site Name *</label>
               <input
                 value={general.site_name}
-                onChange={(e) => setGeneral((g) => ({ ...g, site_name: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setGeneral((g: typeof general) => ({ ...g, site_name: e.target.value }))}
                 className={inputClass}
                 placeholder="My SaaS"
               />
@@ -141,7 +142,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
               <label className="block text-xs text-slate-400 mb-1.5 font-medium">Logo Text</label>
               <input
                 value={general.logo_text}
-                onChange={(e) => setGeneral((g) => ({ ...g, logo_text: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setGeneral((g: typeof general) => ({ ...g, logo_text: e.target.value }))}
                 className={inputClass}
                 placeholder="spark"
               />
@@ -152,7 +153,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
             <label className="block text-xs text-slate-400 mb-1.5 font-medium">Site Tagline</label>
             <input
               value={general.site_tagline}
-              onChange={(e) => setGeneral((g) => ({ ...g, site_tagline: e.target.value }))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setGeneral((g: typeof general) => ({ ...g, site_tagline: e.target.value }))}
               className={inputClass}
               placeholder="Build better software, faster"
             />
@@ -162,7 +163,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
             <label className="block text-xs text-slate-400 mb-1.5 font-medium">Site URL</label>
             <input
               value={general.site_url}
-              onChange={(e) => setGeneral((g) => ({ ...g, site_url: e.target.value }))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setGeneral((g: typeof general) => ({ ...g, site_url: e.target.value }))}
               className={inputClass}
               placeholder="https://yourdomain.com"
             />
@@ -172,7 +173,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
             <label className="block text-xs text-slate-400 mb-1.5 font-medium">Logo Image URL (optional)</label>
             <input
               value={general.logo_url}
-              onChange={(e) => setGeneral((g) => ({ ...g, logo_url: e.target.value }))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setGeneral((g: typeof general) => ({ ...g, logo_url: e.target.value }))}
               className={inputClass}
               placeholder="https://..."
             />
@@ -182,7 +183,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
             <label className="block text-xs text-slate-400 mb-1.5 font-medium">Favicon URL (optional)</label>
             <input
               value={general.favicon_url}
-              onChange={(e) => setGeneral((g) => ({ ...g, favicon_url: e.target.value }))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setGeneral((g: typeof general) => ({ ...g, favicon_url: e.target.value }))}
               className={inputClass}
               placeholder="https://..."
             />
@@ -194,7 +195,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
               <p className="text-slate-500 text-xs mt-0.5">Show maintenance page to all visitors</p>
             </div>
             <button
-              onClick={() => setGeneral((g) => ({ ...g, maintenance_mode: !g.maintenance_mode }))}
+              onClick={() => setGeneral((g: typeof general) => ({ ...g, maintenance_mode: !g.maintenance_mode }))}
               className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${general.maintenance_mode ? 'bg-red-500' : 'bg-white/10'}`}
             >
               <span className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform duration-200 ${general.maintenance_mode ? 'translate-x-7' : 'translate-x-1'}`} />
@@ -218,17 +219,17 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
               </button>
             </div>
             <div className="space-y-3">
-              {navLinks.map((link, i) => (
+              {navLinks.map((link: import("@/types").NavLink, i: number) => (
                 <div key={i} className="flex items-center gap-3">
                   <input
                     value={link.label}
-                    onChange={(e) => updateNavLink(i, 'label', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateNavLink(i, 'label', e.target.value)}
                     placeholder="Label"
                     className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50"
                   />
                   <input
                     value={link.href}
-                    onChange={(e) => updateNavLink(i, 'href', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateNavLink(i, 'href', e.target.value)}
                     placeholder="/path"
                     className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50"
                   />
@@ -255,17 +256,17 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
               </button>
             </div>
             <div className="space-y-3">
-              {footerLinks.map((link, i) => (
+              {footerLinks.map((link: import("@/types").NavLink, i: number) => (
                 <div key={i} className="flex items-center gap-3">
                   <input
                     value={link.label}
-                    onChange={(e) => updateFooterLink(i, 'label', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFooterLink(i, 'label', e.target.value)}
                     placeholder="Label"
                     className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50"
                   />
                   <input
                     value={link.href}
-                    onChange={(e) => updateFooterLink(i, 'href', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFooterLink(i, 'href', e.target.value)}
                     placeholder="/path"
                     className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50"
                   />
@@ -295,7 +296,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
               <label className="block text-xs text-slate-400 mb-1.5 font-medium">{field.label}</label>
               <input
                 value={social[field.key as keyof typeof social]}
-                onChange={(e) => setSocial((s) => ({ ...s, [field.key]: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSocial((s: typeof social) => ({ ...s, [field.key]: e.target.value }))}
                 placeholder={field.placeholder}
                 className={inputClass}
               />
@@ -313,12 +314,12 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
               <input
                 type="color"
                 value={general.primary_color}
-                onChange={(e) => setGeneral((g) => ({ ...g, primary_color: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setGeneral((g: typeof general) => ({ ...g, primary_color: e.target.value }))}
                 className="w-12 h-10 rounded-lg border border-white/10 bg-transparent cursor-pointer"
               />
               <input
                 value={general.primary_color}
-                onChange={(e) => setGeneral((g) => ({ ...g, primary_color: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setGeneral((g: typeof general) => ({ ...g, primary_color: e.target.value }))}
                 className={`${inputClass} flex-1`}
                 placeholder="#7C3AED"
               />
@@ -328,7 +329,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
             <label className="block text-xs text-slate-400 mb-1.5 font-medium">Google Analytics ID</label>
             <input
               value={general.analytics_id}
-              onChange={(e) => setGeneral((g) => ({ ...g, analytics_id: e.target.value }))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => setGeneral((g: typeof general) => ({ ...g, analytics_id: e.target.value }))}
               className={inputClass}
               placeholder="G-XXXXXXXXXX"
             />
