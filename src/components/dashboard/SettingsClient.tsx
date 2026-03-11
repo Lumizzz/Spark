@@ -66,16 +66,16 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
     }
   };
 
-  const addNavLink = () => setNavLinks((l: import('@/types').NavLink[]) => [...l, { label: 'New Link', href: '/' }]);
-  const removeNavLink = (i: number) => setNavLinks((l: import('@/types').NavLink[]) => l.filter((_: NavLink, idx: number) => idx !== i));
+  const addNavLink = () => setNavLinks((l: NavLink[]) => [...l, { label: 'New Link', href: '/' }]);
+  const removeNavLink = (i: number) => setNavLinks((l: NavLink[]) => l.filter((_: NavLink, idx: number) => idx !== i));
   const updateNavLink = (i: number, key: 'label' | 'href', val: string) => {
-    setNavLinks((l: import('@/types').NavLink[]) => l.map((item: NavLink, idx: number) => (idx === i ? { ...item, [key]: val } : item)));
+    setNavLinks((l: NavLink[]) => l.map((item: NavLink, idx: number) => (idx === i ? { ...item, [key]: val } : item)));
   };
 
-  const addFooterLink = () => setFooterLinks((l: import('@/types').NavLink[]) => [...l, { label: 'New Link', href: '/' }]);
-  const removeFooterLink = (i: number) => setFooterLinks((l: import('@/types').NavLink[]) => l.filter((_: NavLink, idx: number) => idx !== i));
+  const addFooterLink = () => setFooterLinks((l: NavLink[]) => [...l, { label: 'New Link', href: '/' }]);
+  const removeFooterLink = (i: number) => setFooterLinks((l: NavLink[]) => l.filter((_: NavLink, idx: number) => idx !== i));
   const updateFooterLink = (i: number, key: 'label' | 'href', val: string) => {
-    setFooterLinks((l: import('@/types').NavLink[]) => l.map((item: NavLink, idx: number) => (idx === i ? { ...item, [key]: val } : item)));
+    setFooterLinks((l: NavLink[]) => l.map((item: NavLink, idx: number) => (idx === i ? { ...item, [key]: val } : item)));
   };
 
   const inputClass =
@@ -219,7 +219,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
               </button>
             </div>
             <div className="space-y-3">
-              {navLinks.map((link: import("@/types").NavLink, i: number) => (
+              {navLinks.map((link: NavLink, i: number) => (
                 <div key={i} className="flex items-center gap-3">
                   <input
                     value={link.label}
@@ -256,7 +256,7 @@ export default function SettingsClient({ settings }: SettingsClientProps) {
               </button>
             </div>
             <div className="space-y-3">
-              {footerLinks.map((link: import("@/types").NavLink, i: number) => (
+              {footerLinks.map((link: NavLink, i: number) => (
                 <div key={i} className="flex items-center gap-3">
                   <input
                     value={link.label}

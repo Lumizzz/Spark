@@ -94,7 +94,7 @@ export default function MediaPickerModal({
     }
   };
 
-  const filteredMedia = media.filter((item: import("@/types").MediaItem) =>
+  const filteredMedia = media.filter((item: MediaItem) =>
     search === '' ||
     item.original_name.toLowerCase().includes(search.toLowerCase()) ||
     item.alt_text?.toLowerCase().includes(search.toLowerCase())
@@ -177,7 +177,7 @@ export default function MediaPickerModal({
             </div>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-              {filteredMedia.map((item: import("@/types").MediaItem) => {
+              {filteredMedia.map((item: MediaItem) => {
                 const isSelected = selected === item.url;
                 return (
                   <button

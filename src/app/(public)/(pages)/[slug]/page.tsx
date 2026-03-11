@@ -48,8 +48,8 @@ export default async function DynamicPage({ params, searchParams }: Props) {
   const needsBlog = sections.some((s) => s.type === 'blog_list');
 
   const [pricingPlans, blogPosts] = await Promise.all([
-    needsPricing ? getPricingPlans() : Promise.resolve([] as import("@/types").PricingPlan[]),
-    needsBlog ? getBlogPosts({ status: 'published', limit: 9 }) : Promise.resolve([] as import('@/types').BlogPost[]),
+    needsPricing ? getPricingPlans() : Promise.resolve([] as PricingPlan[]),
+    needsBlog ? getBlogPosts({ status: 'published', limit: 9 }) : Promise.resolve([] as BlogPost[]),
   ]);
 
   return (

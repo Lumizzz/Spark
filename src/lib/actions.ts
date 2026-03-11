@@ -467,7 +467,7 @@ export async function getPricingPlans(): Promise<PricingPlan[]> {
 
   if (!data) return [];
 
-  return (data as import('@/types').PricingPlan[]).map((plan: import('@/types').PricingPlan) => ({
+  return (data as PricingPlan[]).map((plan: PricingPlan) => ({
     ...plan,
     pricing_features: plan.pricing_features?.sort(
       (a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order

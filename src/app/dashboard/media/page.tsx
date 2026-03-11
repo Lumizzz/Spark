@@ -149,7 +149,7 @@ export default function MediaDashboardPage() {
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {media.map((item: import("@/types").MediaItem) => (
+          {media.map((item: MediaItem) => (
             <div key={item.id} className="group relative aspect-square rounded-xl overflow-hidden glass-card">
               <Image
                 src={item.url}

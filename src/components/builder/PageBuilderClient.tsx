@@ -178,10 +178,10 @@ export default function PageBuilderClient({ page }: PageBuilderClientProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      setSections((items: import("@/types").PageSection[]) => {
-        const oldIndex = items.findIndex((i: import("@/types").PageSection) => i.id === active.id);
-        const newIndex = items.findIndex((i: import("@/types").PageSection) => i.id === over.id);
-        return arrayMove(items, oldIndex as number, newIndex as number).map((s: import("@/types").PageSection, idx: number) => ({ ...s, order: idx }));
+      setSections((items: PageSection[]) => {
+        const oldIndex = items.findIndex((i: PageSection) => i.id === active.id);
+        const newIndex = items.findIndex((i: PageSection) => i.id === over.id);
+        return arrayMove(items, oldIndex as number, newIndex as number).map((s: PageSection, idx: number) => ({ ...s, order: idx }));
       });
     }
   };
@@ -193,17 +193,17 @@ export default function PageBuilderClient({ page }: PageBuilderClientProps) {
       order: sections.length,
       props: DEFAULT_BLOCK_PROPS[type] || {},
     };
-    setSections((prev: import("@/types").PageSection[]) => [...prev, newSection]);
+    setSections((prev: PageSection[]) => [...prev, newSection]);
     setEditingSection(newSection);
   };
 
   const handleDeleteSection = (id: string) => {
-    setSections((prev: import("@/types").PageSection[]) => prev.filter((s) => s.id !== id));
+    setSections((prev: PageSection[]) => prev.filter((s) => s.id !== id));
   };
 
   const handleUpdateProps = useCallback((id: string, props: PageSection['props']) => {
-    setSections((prev: import("@/types").PageSection[]) => prev.map((s: import("@/types").PageSection) => s.id === id ? { ...s, props } : s));
-    setEditingSection((prev: import("@/types").PageSection | null) => prev && prev.id === id ? { ...prev, props } : prev);
+    setSections((prev: PageSection[]) => prev.map((s: PageSection) => s.id === id ? { ...s, props } : s));
+    setEditingSection((prev: PageSection | null) => prev && prev.id === id ? { ...prev, props } : prev);
   }, []);
 
   const handleSave = async () => {
@@ -293,13 +293,13 @@ export default function PageBuilderClient({ page }: PageBuilderClientProps) {
             </div>
           ) : (
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-              <SortableContext items={sections.map((s: import("@/types").PageSection) => s.id)} strategy={verticalListSortingStrategy}>
+              <SortableContext items={sections.map((s: PageSection) => s.id)} strategy={verticalListSortingStrategy}>
                 <div className="space-y-2">
-                  {sections.map((section: import("@/types").PageSection) => (
+                  {sections.map((section: PageSection) => (
                     <SortableSection
                       key={section.id}
                       section={section}
-                      onEdit={(s: import('@/types').PageSection) => setEditingSection(s)}
+                      onEdit={(s: PageSection) => setEditingSection(s)}
                       onDelete={handleDeleteSection}
                     />
                   ))}

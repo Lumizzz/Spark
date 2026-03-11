@@ -194,7 +194,7 @@ export default function UsersClient({ users: initial, currentUserId }: { users: 
           </div>
         ) : (
           <div className="divide-y divide-white/5">
-            {filtered.map((user: import('@/types').Profile) => {
+            {filtered.map((user: Profile) => {
               const roleName = (user.roles as { name: string } | undefined)?.name || 'editor';
               const rc = ROLE_CONFIG[roleName] || ROLE_CONFIG.editor;
               const isMe = user.id === currentUserId;
