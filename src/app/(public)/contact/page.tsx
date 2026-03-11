@@ -38,8 +38,8 @@ export default function ContactPage() {
   const [sent, setSent] = useState(false);
 
   const update = (field: keyof ContactForm, val: string) => {
-    setForm((f: Record<string,string>) => ({ ...f, [field]: val }));
-    if (errors[field]) setErrors((e: Record<string,string|undefined>) => ({ ...e, [field]: undefined }));
+    setForm((f: ContactForm) => ({ ...f, [field]: val }));
+    if (errors[field]) setErrors((e: FieldErrors) => ({ ...e, [field]: undefined }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
