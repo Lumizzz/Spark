@@ -57,7 +57,7 @@ function Select({ value, onChange, options }: {
   return (
     <select
       value={value ?? ''}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange(e.target.value)}
       className="w-full px-3 py-2 rounded-lg bg-[#0a0a1a] border border-white/10 text-white text-xs focus:outline-none focus:border-purple-500/50"
     >
       {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
